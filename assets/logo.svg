@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 120" fill="none">
+  <!-- Horizontal lockup. Wordmark is set in Archivo 700; outline the text
+       before handing this file to a printer so it can't fall back. -->
+  <g transform="translate(10 20) scale(0.8)">
+    <path fill="#6A5CFF" fill-rule="evenodd"
+          d="M26 14H48A36 36 0 0 1 48 86H14V26Z
+             M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/>
+  </g>
+
+  <text x="118" y="73"
+        font-family="Archivo, 'Helvetica Neue', Arial, sans-serif"
+        font-weight="700" font-size="38" letter-spacing="5.5"
+        fill="#F5F5F7">DSIGNZHUB</text>
+</svg>
