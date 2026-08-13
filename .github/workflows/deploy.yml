@@ -24,8 +24,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # enablement:true turns Pages on via the API. Without it the first run of
+      # a brand-new repo fails with "Get Pages site failed" until someone flips
+      # Settings > Pages > Source to GitHub Actions by hand.
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
