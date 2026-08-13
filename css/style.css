@@ -283,7 +283,9 @@ body {
 }
 
 /* ---------- About ---------- */
-.about { padding: 80px 0; }
+/* These sections are also `.container`, so they must set vertical padding only —
+   a `padding: 80px 0` shorthand would zero out the container's side gutters. */
+.about { padding-block: 80px; }
 .about-statement {
   font-family: var(--font-head);
   font-weight: 600;
@@ -294,7 +296,7 @@ body {
 .about-text { color: var(--text-dim); font-size: 16px; max-width: 620px; }
 
 /* ---------- Services ---------- */
-.services { padding: 60px 0 80px; }
+.services { padding-block: 60px 80px; }
 .services-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -346,7 +348,7 @@ body {
 .service-card p { color: var(--text-dim); font-size: 14.5px; }
 
 /* ---------- Approach ---------- */
-.approach { padding: 60px 0 80px; }
+.approach { padding-block: 60px 80px; }
 .approach-steps {
   display: grid;
   grid-template-columns: 1fr;
@@ -389,7 +391,7 @@ body {
 .why-card p { color: var(--text-dim); font-size: 14.5px; }
 
 /* ---------- Contact ---------- */
-.contact { padding: 80px 0 100px; }
+.contact { padding-block: 80px 100px; }
 .contact-panel {
   background: linear-gradient(160deg, var(--surface), var(--bg-alt));
   border: 1px solid var(--border);
