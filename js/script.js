@@ -151,7 +151,7 @@ if (finePointer && !reducedMotion) {
     el.addEventListener('pointerleave', () => setRing(null));
   });
 
-  document.querySelectorAll('.service-card').forEach((card) => {
+  document.querySelectorAll('.service-card, .d-card, .s-card, .rel-card').forEach((card) => {
     card.addEventListener('pointerenter', () => setRing('label', 'Explore'));
     card.addEventListener('pointerleave', () => setRing(null));
     card.addEventListener('pointermove', (e) => {
@@ -181,3 +181,55 @@ if (finePointer && !reducedMotion) {
     }, { passive: true });
   }
 }
+
+
+/* ---------------- Mobile services accordion ---------------- */
+const mDropToggle = document.getElementById('mDropToggle');
+const mDropList = document.getElementById('mDropList');
+if (mDropToggle && mDropList) {
+  mDropToggle.addEventListener('click', () => {
+    const open = mDropList.classList.toggle('open');
+    mDropToggle.setAttribute('aria-expanded', String(open));
+  });
+}
+
+/* ---------------- FAQ accordion ----------------
+   One open at a time. The panel animates via grid-template-rows so it works
+   without measuring pixel heights. */
+document.querySelectorAll('.faq-q').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+    document.querySelectorAll('.faq-q[aria-expanded="true"]').forEach((other) => {
+      if (other !== btn) {
+        other.setAttribute('aria-expanded', 'false');
+        document.getElementById(other.getAttribute('aria-controls')).classList.remove('open');
+      }
+    });
+
+    btn.setAttribute('aria-expanded', String(!isOpen));
+    panel.classList.toggle('open', !isOpen);
+  });
+});
+
+/* ---------------- Service hero spotlight ---------------- */
+const svcHero = document.querySelector('.svc-hero');
+if (svcHero && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  svcHero.addEventListener('pointermove', (e) => {
+    const r = svcHero.getBoundingClientRect();
+    svcHero.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    svcHero.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  }, { passive: true });
+}
+
+/* ---------------- Staggered reveals ----------------
+   Cards inside a grid animate in sequence rather than all at once. */
+document.querySelectorAll('.d-grid, .s-grid, .rel-grid, .b-grid, .services-grid').forEach((grid) => {
+  Array.from(grid.children).forEach((child, i) => {
+    if (child.classList.contains('reveal')) {
+      child.classList.add('stagger-' + ((i % 4) + 1));
+    }
+  });
+});

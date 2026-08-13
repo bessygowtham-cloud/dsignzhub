@@ -3,34 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dsignzhub — Digital Design, Development &amp; Marketing Agency</title>
-<meta name="description" content="Dsignzhub helps Indian businesses build a powerful online presence — Website Design &amp; Development, PWA, E-commerce, Digital Marketing, SEO, Google Ads, Branding &amp; Graphic Design.">
-<link rel="icon" type="image/svg+xml" href="assets/logo-icon.svg">
+<title>Web Design, Development, SEO &amp; Marketing in India | Dsignzhub</title>
+<meta name="description" content="Dsignzhub builds websites, online stores and marketing that grow Indian businesses. Website design and development, PWAs, e-commerce, SEO, Google Ads and branding.">
+<link rel="canonical" href="https://www.dsignzhub.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Web Design, Development, SEO &amp; Marketing in India | Dsignzhub">
+<meta property="og:description" content="Dsignzhub builds websites, online stores and marketing that grow Indian businesses. Website design and development, PWAs, e-commerce, SEO, Google Ads and branding.">
+<meta property="og:url" content="https://www.dsignzhub.com">
+<meta property="og:site_name" content="Dsignzhub">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Web Design, Development, SEO &amp; Marketing in India | Dsignzhub">
+<meta name="twitter:description" content="Dsignzhub builds websites, online stores and marketing that grow Indian businesses. Website design and development, PWAs, e-commerce, SEO, Google Ads and branding.">
+<link rel="icon" type="image/svg+xml" href="./assets/logo-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="./css/style.css?v=d515e299">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Dsignzhub", "url": "https://www.dsignzhub.com/", "email": "hello@dsignzhub.com", "description": "Digital design, development & marketing for Indian businesses.", "areaServed": {"@type": "Country", "name": "India"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Dsignzhub", "url": "https://www.dsignzhub.com/"}</script>
 </head>
 <body>
-
 <div class="noise"></div>
-
+<a href="#main" class="skip-link">Skip to content</a>
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
-    <a href="#top" class="brand" data-cursor="link">
-      <img src="assets/logo-icon.svg" alt="" class="brand-icon" width="34" height="34">
+    <a href="./" class="brand" aria-label="Dsignzhub home">
+      <svg class="brand-icon" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+<path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>
       <span class="brand-word">Dsignzhub</span>
     </a>
 
     <nav class="nav-desktop" aria-label="Primary">
-      <a href="#services">Services</a>
-      <a href="#approach">Approach</a>
-      <a href="#why-us">Why Us</a>
-      <a href="#contact">Contact</a>
+      <div class="has-drop">
+        <a href="./services/" aria-haspopup="true" aria-expanded="false">Services
+          <svg viewBox="0 0 12 8" class="caret" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </a>
+        <div class="drop">
+          <ul><li><a href="./services/website-design-development/"><span>Website Design &amp; Development</span></a></li><li><a href="./services/progressive-web-apps/"><span>Progressive Web App Development</span></a></li><li><a href="./services/ecommerce-development/"><span>E-commerce Solutions</span></a></li><li><a href="./services/digital-marketing/"><span>Digital Marketing</span></a></li><li><a href="./services/seo-services/"><span>SEO Services</span></a></li><li><a href="./services/google-ads/"><span>Google Ads</span></a></li><li><a href="./services/graphic-design/"><span>Print &amp; Graphic Design</span></a></li><li><a href="./services/social-media-marketing/"><span>Social Media &amp; Banners</span></a></li><li><a href="./services/branding/"><span>Branding</span></a></li></ul>
+        </div>
+      </div>
+      <a href="./about/">About</a>
+      <a href="./contact/">Contact</a>
     </nav>
 
     <div class="header-actions">
-      <a href="#contact" class="btn btn-primary btn-sm">Get In Touch</a>
+      <a href="./contact/" class="btn btn-primary btn-sm">Get In Touch</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span><span></span>
       </button>
@@ -39,320 +56,184 @@
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
-  <nav aria-label="Mobile Primary">
-    <a href="#services">Services</a>
-    <a href="#approach">Approach</a>
-    <a href="#why-us">Why Us</a>
-    <a href="#contact">Contact</a>
+  <nav aria-label="Mobile primary">
+    <a href="./">Home</a>
+    <button class="m-drop-toggle" id="mDropToggle" aria-expanded="false" aria-controls="mDropList">
+      Services
+      <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <ul class="m-drop" id="mDropList"><li><a href="./services/website-design-development/"><span>Website Design &amp; Development</span></a></li><li><a href="./services/progressive-web-apps/"><span>Progressive Web App Development</span></a></li><li><a href="./services/ecommerce-development/"><span>E-commerce Solutions</span></a></li><li><a href="./services/digital-marketing/"><span>Digital Marketing</span></a></li><li><a href="./services/seo-services/"><span>SEO Services</span></a></li><li><a href="./services/google-ads/"><span>Google Ads</span></a></li><li><a href="./services/graphic-design/"><span>Print &amp; Graphic Design</span></a></li><li><a href="./services/social-media-marketing/"><span>Social Media &amp; Banners</span></a></li><li><a href="./services/branding/"><span>Branding</span></a></li></ul>
+    <a href="./about/">About</a>
+    <a href="./contact/">Contact</a>
   </nav>
   <div class="mobile-menu-footer">
-    <a href="#contact" class="btn btn-primary">Start a Project</a>
+    <a href="./contact/" class="btn btn-primary">Start a Project</a>
     <p>hello@dsignzhub.com</p>
   </div>
 </div>
+<main id="main">
 
-<main id="top">
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container hero-inner">
-      <p class="eyebrow reveal">DIGITAL SOLUTIONS FOR INDIAN BUSINESSES</p>
-      <h1 class="hero-title reveal">
-        WE BUILD DIGITAL<br>
-        PRESENCE THAT <span class="text-gradient">GROWS</span><br>
-        YOUR BUSINESS
-      </h1>
-      <p class="hero-sub reveal">
-        Website &amp; app development, e-commerce, SEO, Google Ads and branding —
-        combined into one digital system that gets Indian businesses found, chosen and remembered.
-      </p>
-      <div class="hero-cta reveal">
-        <a href="#contact" class="btn btn-primary">Start a Project</a>
-        <a href="#services" class="btn btn-ghost">Explore Services</a>
-      </div>
-    </div>
-
-    <div class="hero-visual" aria-hidden="true">
-      <div class="orbit-card">
-        <svg class="orbit-ring" viewBox="0 0 200 200" fill="none">
-          <circle cx="100" cy="100" r="94" stroke="rgba(255,255,255,0.14)" stroke-width="1" stroke-dasharray="3 9"/>
-          <circle cx="100" cy="100" r="68" stroke="rgba(139,123,255,0.28)" stroke-width="1"/>
-        </svg>
-        <img src="assets/logo-icon.svg" alt="" class="orbit-mark">
-        <span class="orbit-node n1">Web</span>
-        <span class="orbit-node n2">SEO</span>
-        <span class="orbit-node n3">Ads</span>
-        <span class="orbit-node n4">Brand</span>
-        <span class="orbit-node n5">Shop</span>
-        <span class="orbit-node n6">Social</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- MARQUEE -->
-  <div class="marquee">
-    <div class="marquee-track">
-      <span>Website Design &amp; Development</span><span>•</span>
-      <span>Progressive Web Apps</span><span>•</span>
-      <span>E‑commerce Solutions</span><span>•</span>
-      <span>Digital Marketing</span><span>•</span>
-      <span>SEO Services</span><span>•</span>
-      <span>Google Ads</span><span>•</span>
-      <span>Branding</span><span>•</span>
-      <span>Graphic Design</span><span>•</span>
-      <span>Website Design &amp; Development</span><span>•</span>
-      <span>Progressive Web Apps</span><span>•</span>
-      <span>E‑commerce Solutions</span><span>•</span>
-      <span>Digital Marketing</span><span>•</span>
-      <span>SEO Services</span><span>•</span>
-      <span>Google Ads</span><span>•</span>
-      <span>Branding</span><span>•</span>
-      <span>Graphic Design</span><span>•</span>
+<section class="hero">
+  <div class="container hero-inner">
+    <p class="eyebrow reveal">Digital solutions for Indian businesses</p>
+    <h1 class="hero-title reveal">WE BUILD DIGITAL<br>PRESENCE THAT <span class="text-gradient">GROWS</span><br>YOUR BUSINESS</h1>
+    <p class="hero-sub reveal">Website &amp; app development, e-commerce, SEO, Google Ads and branding — combined into one digital system that gets Indian businesses found, chosen and remembered.</p>
+    <div class="hero-cta reveal">
+      <a href="./contact/" class="btn btn-primary">Start a Project</a>
+      <a href="./services/" class="btn btn-ghost">Explore Services</a>
     </div>
   </div>
 
-  <!-- ABOUT -->
-  <section class="about container">
-    <div class="about-grid">
-      <p class="section-label reveal">WHO WE ARE</p>
-      <div class="about-content">
-        <h2 class="about-statement reveal">
-          End‑to‑end digital solutions for businesses that want to be found,
-          chosen and remembered online.
-        </h2>
-        <p class="about-text reveal">
-          We combine creative design, strategic thinking and data‑driven marketing to help
-          Indian businesses build a powerful and lasting online presence — from engaging
-          websites and high‑performing online stores to stronger search visibility,
-          qualified leads and memorable brands.
-        </p>
-      </div>
+  <div class="hero-visual" aria-hidden="true">
+    <div class="orbit-card">
+      <svg class="orbit-ring" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="94" stroke="rgba(255,255,255,0.14)" stroke-width="1" stroke-dasharray="3 9"/>
+        <circle cx="100" cy="100" r="68" stroke="rgba(139,123,255,0.28)" stroke-width="1"/>
+      </svg>
+      <img src="./assets/logo-icon.svg" alt="" class="orbit-mark">
+      <span class="orbit-node n1">Web</span>
+      <span class="orbit-node n2">SEO</span>
+      <span class="orbit-node n3">Ads</span>
+      <span class="orbit-node n4">Brand</span>
+      <span class="orbit-node n5">Shop</span>
+      <span class="orbit-node n6">Social</span>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SERVICES -->
-  <section class="services container" id="services">
-    <p class="section-label reveal">WHAT WE DO</p>
-    <h2 class="section-title reveal">Our Services</h2>
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track"><span>Website Design &amp; Development</span><span aria-hidden='true'>•</span><span>Progressive Web App Development</span><span aria-hidden='true'>•</span><span>E-commerce Solutions</span><span aria-hidden='true'>•</span><span>Digital Marketing</span><span aria-hidden='true'>•</span><span>SEO Services</span><span aria-hidden='true'>•</span><span>Google Ads</span><span aria-hidden='true'>•</span><span>Print &amp; Graphic Design</span><span aria-hidden='true'>•</span><span>Social Media &amp; Banners</span><span aria-hidden='true'>•</span><span>Branding</span><span aria-hidden='true'>•</span><span>Website Design &amp; Development</span><span aria-hidden='true'>•</span><span>Progressive Web App Development</span><span aria-hidden='true'>•</span><span>E-commerce Solutions</span><span aria-hidden='true'>•</span><span>Digital Marketing</span><span aria-hidden='true'>•</span><span>SEO Services</span><span aria-hidden='true'>•</span><span>Google Ads</span><span aria-hidden='true'>•</span><span>Print &amp; Graphic Design</span><span aria-hidden='true'>•</span><span>Social Media &amp; Banners</span><span aria-hidden='true'>•</span><span>Branding</span><span aria-hidden='true'>•</span></div>
+</div>
 
-    <div class="services-grid">
+<section class="about container">
+  <div class="about-grid">
+    <p class="section-label reveal">Who we are</p>
+    <div class="about-content">
+      <h2 class="about-statement reveal">End-to-end digital solutions for businesses that want to be found, chosen and remembered online.</h2>
+      <p class="about-text reveal">We combine creative design, strategic thinking and data-driven marketing to help Indian businesses build a powerful and lasting online presence — from engaging websites and high-performing online stores to stronger search visibility, qualified leads and memorable brands.</p>
+    </div>
+  </div>
+</section>
 
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5V8H3V5.5Z"/><path d="M3 8h18v10.5A2.5 2.5 0 0 1 18.5 21h-13A2.5 2.5 0 0 1 3 18.5V8Z"/><circle cx="6.5" cy="5.5" r=".75" fill="currentColor" stroke="none"/><circle cx="9" cy="5.5" r=".75" fill="currentColor" stroke="none"/></svg>
-        </div>
+<section class="services container" id="services">
+  <p class="section-label reveal">What we do</p>
+  <h2 class="section-title reveal">Our Services</h2>
+  <div class="services-grid">
+      <a class="service-card reveal" href="./services/website-design-development/">
         <h3>Website Design &amp; Development</h3>
-        <p>Fast, mobile‑first websites built to convert visitors into customers.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="10" y1="18.5" x2="14" y2="18.5"/></svg>
-        </div>
-        <h3>Progressive Web Apps</h3>
-        <p>App‑like experiences that load instantly and work across every device.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3h2.4L7.6 15h10.3l2.6-9H6"/></svg>
-        </div>
-        <h3>E‑commerce Solutions</h3>
-        <p>Online stores designed to make browsing, buying and repeat‑buying effortless.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 11 19 4l-3 16-5-6-6-2Z"/></svg>
-        </div>
+        <p>We design and build fast, mobile-first websites that turn visitors into enquiries. Every site is built…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/progressive-web-apps/">
+        <h3>Progressive Web App Development</h3>
+        <p>A progressive web app gives your customers the speed and feel of a native app — installable,…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/ecommerce-development/">
+        <h3>E-commerce Solutions</h3>
+        <p>We build online stores designed around one job: making it effortless to browse, buy and come back.…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/digital-marketing/">
         <h3>Digital Marketing</h3>
-        <p>Data‑driven campaigns across channels that turn attention into revenue.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="21" y1="21" x2="15.3" y2="15.3"/></svg>
-        </div>
+        <p>We build and run digital marketing campaigns that are judged on one thing: what they return. Strategy,…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/seo-services/">
         <h3>SEO Services</h3>
-        <p>Stronger search visibility that puts your business in front of ready‑to‑buy customers.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
-        </div>
+        <p>Search visibility that brings in customers who are already looking for what you sell. Technical fixes,…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/google-ads/">
         <h3>Google Ads</h3>
-        <p>Targeted, measurable ad campaigns built to generate qualified leads fast.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="12" rx="1.5"/><path d="M8 20h8M9 15v2h6v-2"/></svg>
-        </div>
+        <p>Google Ads is the fastest way to put your business in front of people actively searching to buy. We…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/graphic-design/">
         <h3>Print &amp; Graphic Design</h3>
-        <p>Brochures, packaging and print collateral that look as sharp as your brand.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M8 16h5"/></svg>
-        </div>
-        <h3>Social Media Banners</h3>
-        <p>Scroll‑stopping creative built for every platform and every campaign.</p>
-      </article>
-
-      <article class="service-card reveal">
-        <div class="service-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
+        <p>Brochures, packaging, catalogues and collateral designed with the same care as your digital presence —…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/social-media-marketing/">
+        <h3>Social Media &amp; Banners</h3>
+        <p>Social creative built for the way people actually use their feeds — designed to be understood in the…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>
+      <a class="service-card reveal" href="./services/branding/">
         <h3>Branding</h3>
-        <p>Distinct brand identities that make your business memorable and trusted.</p>
-      </article>
+        <p>A brand is what people say about you when you are not in the room. We build the strategy, the identity…</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a></div>
+</section>
 
-    </div>
-  </section>
-
-  <!-- APPROACH -->
-  <section class="approach container" id="approach">
-    <p class="section-label reveal">HOW WE WORK</p>
-    <h2 class="section-title reveal">Our Approach</h2>
-
-    <div class="approach-steps">
-      <div class="step reveal">
-        <span class="step-num">01</span>
-        <h3>Discover</h3>
-        <p>We learn your business, audience and goals before proposing a single pixel.</p>
-      </div>
-      <div class="step reveal">
-        <span class="step-num">02</span>
-        <h3>Design &amp; Build</h3>
-        <p>Creative direction and clean development come together into one working product.</p>
-      </div>
-      <div class="step reveal">
-        <span class="step-num">03</span>
-        <h3>Launch</h3>
-        <p>We ship on time, test across devices, and make sure everything performs on day one.</p>
-      </div>
-      <div class="step reveal">
-        <span class="step-num">04</span>
-        <h3>Grow</h3>
-        <p>Ongoing SEO, ads and optimisation keep your presence compounding month over month.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHY US -->
-  <section class="why-us" id="why-us">
-    <div class="container">
-      <p class="section-label reveal">WHY DSIGNZHUB</p>
-      <h2 class="section-title reveal">Built for businesses that want results, not just visuals</h2>
-
-      <div class="why-grid">
-        <div class="why-card reveal">
-          <h3>Mobile‑first by default</h3>
-          <p>Every build is designed for how your customers actually browse — on their phones, first.</p>
+<section class="svc-section container">
+  <p class="section-label reveal">How we work</p>
+  <h2 class="section-title reveal">Our Approach</h2>
+  <div class="approach-steps">
+        <div class="step reveal">
+          <span class="step-num">01</span>
+          <h3>Discover</h3>
+          <p>We learn your business, your customers and your goals before proposing anything.</p>
         </div>
-        <div class="why-card reveal">
-          <h3>One team, every discipline</h3>
-          <p>Design, development, SEO and marketing under one roof — no handoffs, no gaps.</p>
+        <div class="step reveal">
+          <span class="step-num">02</span>
+          <h3>Plan</h3>
+          <p>You get a clear scope, a fixed quote and a timeline, so there are no surprises later.</p>
         </div>
-        <div class="why-card reveal">
-          <h3>Data‑driven decisions</h3>
-          <p>We track what matters and adjust strategy based on real performance, not guesswork.</p>
+        <div class="step reveal">
+          <span class="step-num">03</span>
+          <h3>Build</h3>
+          <p>Design and development run together, with progress you can see rather than wait for.</p>
         </div>
-        <div class="why-card reveal">
-          <h3>Built for Indian businesses</h3>
-          <p>Local market understanding, transparent pricing and communication that stays clear.</p>
-        </div>
+        <div class="step reveal">
+          <span class="step-num">04</span>
+          <h3>Grow</h3>
+          <p>After launch we measure, refine and keep improving what the numbers tell us to.</p>
+        </div></div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <h2>Let's build something great for your business.</h2>
+      <p>Tell us a bit about your project and we'll get back to you shortly.</p>
+      <div class="cta-actions">
+        <a href="./contact/" class="btn btn-primary">Start a Project</a>
+        <a href="mailto:hello@dsignzhub.com" class="btn btn-ghost">hello@dsignzhub.com</a>
       </div>
     </div>
-  </section>
-
-  <!-- CONTACT / CTA -->
-  <section class="contact container" id="contact">
-    <div class="contact-panel">
-      <p class="section-label reveal">GET STARTED</p>
-      <h2 class="reveal">Let's build something great for your business.</h2>
-      <p class="contact-sub reveal">Tell us a bit about your project and we'll get back to you shortly.</p>
-
-      <form class="contact-form reveal" id="contactForm">
-        <div class="form-row">
-          <div class="field">
-            <label for="name">Full Name*</label>
-            <input type="text" id="name" name="name" required>
-          </div>
-          <div class="field">
-            <label for="email">Email*</label>
-            <input type="email" id="email" name="email" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field">
-            <label for="phone">Phone / WhatsApp</label>
-            <input type="tel" id="phone" name="phone">
-          </div>
-          <div class="field">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company">
-          </div>
-        </div>
-        <div class="field">
-          <label for="message">About your project</label>
-          <textarea id="message" name="message" rows="4"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send Message</button>
-        <p class="form-note" id="formNote"></p>
-      </form>
-
-      <div class="contact-direct reveal">
-        <a href="mailto:hello@dsignzhub.com">hello@dsignzhub.com</a>
-        <span class="dot">•</span>
-        <a href="tel:+910000000000">+91 00000 00000</a>
-      </div>
-    </div>
-  </section>
+  </div>
+</section>
 
 </main>
-
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <a href="#top" class="brand" data-cursor="link">
-        <img src="assets/logo-icon.svg" alt="" class="brand-icon" width="30" height="30">
-        <span class="brand-word">Dsignzhub</span>
-      </a>
-      <p>Digital design, development &amp; marketing for Indian businesses.</p>
+      <a href="./" class="brand"><svg class="brand-icon" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+<path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg><span class="brand-word">Dsignzhub</span></a>
+      <p>Digital design, development & marketing for Indian businesses.</p>
     </div>
-
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a href="#services">Services</a>
-      <a href="#approach">Approach</a>
-      <a href="#why-us">Why Us</a>
-      <a href="#contact">Contact</a>
-    </div>
-
     <div class="footer-col">
       <h4>Services</h4>
-      <a href="#services">Website Development</a>
-      <a href="#services">E‑commerce</a>
-      <a href="#services">SEO &amp; Google Ads</a>
-      <a href="#services">Branding</a>
+      <a href="./services/website-design-development/">Website Design &amp; Development</a><a href="./services/progressive-web-apps/">Progressive Web App Development</a><a href="./services/ecommerce-development/">E-commerce Solutions</a><a href="./services/digital-marketing/">Digital Marketing</a><a href="./services/seo-services/">SEO Services</a>
+      <a href="./services/">All services</a>
     </div>
-
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="./about/">About</a>
+      <a href="./contact/">Contact</a>
+    </div>
     <div class="footer-col">
       <h4>Connect</h4>
       <a href="mailto:hello@dsignzhub.com">hello@dsignzhub.com</a>
       <a href="tel:+910000000000">+91 00000 00000</a>
     </div>
   </div>
-
   <div class="container footer-bottom">
     <p>&copy; <span id="year"></span> Dsignzhub. All rights reserved.</p>
     <p>Made in India</p>
   </div>
 </footer>
-
-<script src="js/script.js"></script>
+<script src="./js/script.js?v=4fc8e9de"></script>
 </body>
 </html>
