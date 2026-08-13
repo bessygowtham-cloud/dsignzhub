@@ -85,7 +85,14 @@ python3 build/build.py        # regenerate before committing
 git add -A && git commit -m "…" && git push
 ```
 
-First deploy only: in **Settings → Pages**, set **Source** to **GitHub Actions**.
+**One-time setup (required before the first successful deploy):** in
+**Settings → Pages**, set **Source** to **GitHub Actions**.
+
+This cannot be automated. The workflow's `GITHUB_TOKEN` can publish to Pages but
+cannot create the Pages site — `configure-pages` with `enablement: true` fails with
+`Resource not accessible by integration`, because creating a site needs repo-admin
+rights the default token does not carry. Until the toggle is set, every run fails at
+"Setup Pages" with `Get Pages site failed`.
 
 To point the custom domain at it, add a `CNAME` file containing `www.dsignzhub.com` and
 set the DNS record at your registrar.
