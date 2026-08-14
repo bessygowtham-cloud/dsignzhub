@@ -346,3 +346,44 @@ PROCESS = [
 ]
 
 SERVICE_BY_SLUG = {s["slug"]: s for s in SERVICES}
+
+
+# --------------------------------------------------------------------------
+# Homepage showcase.
+#
+# PLACEHOLDER WORK. The artwork is generated abstract mockups, not real client
+# projects, and no client names or performance figures are claimed anywhere on
+# purpose — publishing invented case studies or metrics would mislead visitors.
+# Replace `image` with real screenshots and fill in `client` when you have
+# permission to name them.
+# --------------------------------------------------------------------------
+SHOWCASE = [
+    ("E-commerce Website", "Retail", "ecommerce.svg",
+     "A storefront built around fast browsing, filterable catalogues and a short, tested checkout."),
+    ("Performance Dashboard", "Analytics", "dashboard.svg",
+     "Campaign and revenue reporting pulled into one screen, so decisions come from data."),
+    ("Brand Identity System", "Branding", "branding.svg",
+     "Logo, palette, typography and guidelines built as one coherent, reusable system."),
+    ("Progressive Web App", "Mobile", "mobile-app.svg",
+     "App-like speed and home-screen install without the cost of separate native builds."),
+    ("Search Visibility", "SEO", "seo.svg",
+     "Technical fixes and content structured to rank for terms real buyers actually search."),
+    ("Social Campaign Set", "Creative", "social.svg",
+     "Coordinated creative sized correctly for every platform and placement."),
+]
+
+# Trust markers shown under the hero. Numbers are illustrative placeholders —
+# replace them with real figures before promoting the site.
+STATS = [
+    ("9", "Services under one roof"),
+    ("100%", "Mobile-first builds"),
+    ("24h", "Typical quote turnaround"),
+    ("0", "Lock-in — you own everything"),
+]
+
+WHY_US = [
+    ("mobile", "Mobile-first by default", "Designed for the phone first, because that is where most Indian web traffic comes from."),
+    ("team", "One team, every discipline", "Design, development, SEO and marketing under one roof — no handoffs, no gaps."),
+    ("data", "Data-driven decisions", "We track what matters and adjust based on real performance, not guesswork."),
+    ("shield", "You own everything", "Code, domains, ad accounts and source files stay yours, including if you leave."),
+]

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" width="560" height="380" role="img">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="560" y2="380" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#8b7bff" stop-opacity=".30"/><stop offset="1" stop-color="#0b0b14"/>
+  </linearGradient>
+  <clipPath id="clip"><rect x="26" y="60" width="508" height="294" rx="10"/></clipPath>
+</defs>
+<rect width="560" height="380" fill="#0b0b14"/>
+<rect width="560" height="380" fill="url(#bg)"/>
+<rect x="26" y="22" width="508" height="332" rx="14" fill="#171728" stroke="rgba(255,255,255,0.10)"/>
+<circle cx="48" cy="42" r="4.5" fill="#ff5f57"/><circle cx="64" cy="42" r="4.5" fill="#febc2e"/><circle cx="80" cy="42" r="4.5" fill="#28c840"/>
+<rect x="100" y="35" width="410" height="14" rx="7" fill="rgba(255,255,255,.07)"/>
+<g clip-path="url(#clip)"><rect x="46" y="78" width="468" height="70" rx="10" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,0.10)"/><g><rect x="62" y="94" width="52" height="9" rx="4" fill="rgba(255,255,255,.18)"/><rect x="62" y="112" width="86" height="18" rx="6" fill="#8b7bff" opacity=".85"/></g><g><rect x="218" y="94" width="52" height="9" rx="4" fill="rgba(255,255,255,.18)"/><rect x="218" y="112" width="74" height="18" rx="6" fill="#ffb020" opacity=".85"/></g><g><rect x="374" y="94" width="52" height="9" rx="4" fill="rgba(255,255,255,.18)"/><rect x="374" y="112" width="62" height="18" rx="6" fill="#8b7bff" opacity=".85"/></g><rect x="46" y="162" width="468" height="188" rx="10" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,0.10)"/><line x1="62" y1="196" x2="498" y2="196" stroke="rgba(255,255,255,.06)"/><line x1="62" y1="232" x2="498" y2="232" stroke="rgba(255,255,255,.06)"/><line x1="62" y1="268" x2="498" y2="268" stroke="rgba(255,255,255,.06)"/><line x1="62" y1="304" x2="498" y2="304" stroke="rgba(255,255,255,.06)"/><line x1="62" y1="340" x2="498" y2="340" stroke="rgba(255,255,255,.06)"/><polyline points="62,328 123,297 184,308 245,266 306,277 367,240 428,252 489,218" fill="none" stroke="#ffb020" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="62" cy="328" r="4" fill="#ffb020"/><circle cx="123" cy="297" r="4" fill="#ffb020"/><circle cx="184" cy="308" r="4" fill="#ffb020"/><circle cx="245" cy="266" r="4" fill="#ffb020"/><circle cx="306" cy="277" r="4" fill="#ffb020"/><circle cx="367" cy="240" r="4" fill="#ffb020"/><circle cx="428" cy="252" r="4" fill="#ffb020"/><circle cx="489" cy="218" r="4" fill="#ffb020"/></g>
+</svg>

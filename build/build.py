@@ -12,7 +12,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from content import SITE, SERVICES, PROCESS, SERVICE_BY_SLUG  # noqa: E402
+from content import (SITE, SERVICES, PROCESS, SERVICE_BY_SLUG,  # noqa: E402
+                     SHOWCASE, STATS, WHY_US)
+from icons import sprite, icon  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -55,6 +57,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
     blocks = ""
     for block in (jsonld or []):
         blocks += f'\n<script type="application/ld+json">{json.dumps(block, ensure_ascii=False)}</script>'
+    sprite_markup = sprite()
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,6 +82,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 </head>
 <body>
 <div class="noise"></div>
+{sprite_markup}
 <a href="#main" class="skip-link">Skip to content</a>
 """
 
@@ -131,7 +135,7 @@ def header(depth, active=""):
       Services
       <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     </button>
-    <ul class="m-drop" id="mDropList">{items}</ul>
+    <div class="m-drop" id="mDropList"><ul>{items}</ul></div>
     <a href="{r}about/">About</a>
     <a href="{r}contact/">Contact</a>
   </nav>
@@ -358,6 +362,7 @@ def services_index():
     r = rel(depth)
     cards = "".join(f"""
       <a class="s-card reveal" href="{r}services/{s['slug']}/">
+        <span class="glass-ico">{icon(s['slug'])}</span>
         <h2>{esc(s['nav'])}</h2>
         <p>{esc(s['lede'][:135].rsplit(' ', 1)[0])}…</p>
         <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -392,6 +397,7 @@ def home():
     r = rel(depth)
     cards = "".join(f"""
       <a class="service-card reveal" href="{r}services/{s['slug']}/">
+        <span class="glass-ico">{icon(s['slug'])}</span>
         <h3>{esc(s['nav'])}</h3>
         <p>{esc(s['lede'][:105].rsplit(' ', 1)[0])}…</p>
         <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -403,6 +409,31 @@ def home():
           <h3>{esc(t)}</h3>
           <p>{esc(d)}</p>
         </div>""" for i, (t, d) in enumerate(PROCESS))
+
+    stats = "".join(f"""
+        <div class="stat reveal">
+          <span class="stat-n">{esc(n)}</span>
+          <span class="stat-l">{esc(l)}</span>
+        </div>""" for n, l in STATS)
+
+    work = "".join(f"""
+        <article class="work-card reveal">
+          <div class="work-shot">
+            <img src="{r}assets/work/{img}" alt="{esc(name)} project mockup" loading="lazy" width="560" height="380">
+            <span class="work-tag">{esc(tag)}</span>
+          </div>
+          <div class="work-body">
+            <h3>{esc(name)}</h3>
+            <p>{esc(desc)}</p>
+          </div>
+        </article>""" for name, tag, img, desc in SHOWCASE)
+
+    why = "".join(f"""
+        <div class="why-card reveal">
+          <span class="glass-ico">{icon(ic)}</span>
+          <h3>{esc(t)}</h3>
+          <p>{esc(d)}</p>
+        </div>""" for ic, t, d in WHY_US)
 
     marquee_items = "".join(f"<span>{esc(s['nav'])}</span><span aria-hidden='true'>•</span>" for s in SERVICES)
 
@@ -459,6 +490,10 @@ def home():
   <div class="marquee-track">{marquee_items}{marquee_items}</div>
 </div>
 
+<section class="stats-band">
+  <div class="container stats-grid">{stats}</div>
+</section>
+
 <section class="about container">
   <div class="about-grid">
     <p class="section-label reveal">Who we are</p>
@@ -473,6 +508,20 @@ def home():
   <p class="section-label reveal">What we do</p>
   <h2 class="section-title reveal">Our Services</h2>
   <div class="services-grid">{cards}</div>
+</section>
+
+<section class="work container" id="work">
+  <p class="section-label reveal">Selected work</p>
+  <h2 class="section-title reveal">Projects we build</h2>
+  <div class="work-grid">{work}</div>
+</section>
+
+<section class="why-us" id="why-us">
+  <div class="container">
+    <p class="section-label reveal">Why Dsignzhub</p>
+    <h2 class="section-title reveal">Built for businesses that want results, not just visuals</h2>
+    <div class="why-grid">{why}</div>
+  </div>
 </section>
 
 <section class="svc-section container">

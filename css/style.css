@@ -618,9 +618,12 @@ body {
 }
 .m-drop-toggle svg{width:16px;height:11px;transition:transform .3s ease}
 .m-drop-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+/* Collapsing grid needs exactly ONE grid item, so the <ul> is wrapped:
+   grid-template-rows:0fr only sizes the first row, and a bare list of 9 <li>
+   auto-creates 8 more rows that stay at full height. */
 .m-drop{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
 .m-drop.open{grid-template-rows:1fr}
-.m-drop > li{overflow:hidden}
+.m-drop > ul{overflow:hidden;min-height:0}
 .m-drop li a{
   display:block;font-family:var(--font-body);font-size:15px;font-weight:400;
   color:var(--text-dim);padding:11px 4px 11px 16px;border-bottom:1px solid var(--border);
@@ -755,3 +758,88 @@ body {
   .drop,.m-drop,.faq-a{transition:none}
   .svc-hero::before,.d-card::before,.cta-inner::after{display:none}
 }
+
+/* ==========================================================================
+   Glass icons, stats band, project showcase
+   ========================================================================== */
+
+.icon-sprite{position:absolute;width:0;height:0;overflow:hidden}
+.ico{width:22px;height:22px;display:block}
+
+/* Frosted tile behind every icon. backdrop-filter is progressive — browsers
+   without it still get the tinted background and border. */
+.glass-ico{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;flex-shrink:0;margin-bottom:16px;border-radius:14px;
+  color:var(--violet-2);
+  background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 18px -10px rgba(0,0,0,.8);
+  transition:color .25s ease,border-color .25s ease,transform .25s ease;
+}
+/* specular sheen across the top-left corner */
+.glass-ico::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(140deg,rgba(255,255,255,.22),transparent 46%);
+}
+.service-card:hover .glass-ico,.s-card:hover .glass-ico,.why-card:hover .glass-ico{
+  color:var(--amber);border-color:rgba(255,176,32,.45);transform:translateY(-2px)
+}
+
+/* ---- stats band ---- */
+.stats-band{padding-block:34px;border-bottom:1px solid var(--border);background:var(--bg-alt)}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 16px}
+.stat{display:flex;flex-direction:column;gap:5px}
+.stat-n{font-family:var(--font-head);font-size:clamp(26px,6vw,36px);font-weight:700;letter-spacing:-.02em;
+  background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-variant-numeric:tabular-nums;line-height:1.1}
+.stat-l{font-size:13.5px;color:var(--text-dim);line-height:1.35}
+
+/* ---- project showcase ---- */
+.work{padding-block:64px}
+.work-grid{display:grid;grid-template-columns:1fr;gap:20px}
+.work-card{
+  overflow:hidden;border-radius:18px;background:var(--surface);border:1px solid var(--border);
+  transition:border-color .3s ease,transform .3s ease;
+}
+.work-card:hover{border-color:var(--violet-2);transform:translateY(-4px)}
+.work-shot{position:relative;overflow:hidden;background:var(--bg-alt);aspect-ratio:560/380}
+.work-shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.work-card:hover .work-shot img{transform:scale(1.045)}
+.work-tag{
+  position:absolute;top:12px;left:12px;padding:6px 12px;border-radius:99px;
+  font-family:var(--font-head);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text);
+  background:rgba(12,12,22,.55);border:1px solid rgba(255,255,255,.16);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.work-body{padding:20px 22px 24px}
+.work-body h3{font-family:var(--font-head);font-size:17px;font-weight:600;margin-bottom:7px}
+.work-body p{color:var(--text-dim);font-size:14.5px}
+
+/* why-us cards pick up the glass treatment too */
+.why-card{
+  background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+  border:1px solid var(--border);border-radius:18px;padding:24px;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:border-color .25s ease,transform .25s ease;
+}
+.why-card:hover{border-color:var(--violet-2);transform:translateY(-3px)}
+
+@media (min-width:720px){
+  .stats-grid{grid-template-columns:repeat(4,1fr);gap:20px}
+  .work-grid{grid-template-columns:1fr 1fr}
+}
+@media (min-width:980px){
+  .work-grid{grid-template-columns:repeat(3,1fr);gap:22px}
+  .work{padding-block:84px}
+}
+@media (prefers-reduced-motion:reduce){
+  .work-card:hover .work-shot img,.work-card:hover,.why-card:hover,.glass-ico{transform:none}
+  .work-shot img{transition:none}
+}
+
+/* Logo link was a 30px tap target — below the 44px comfortable minimum. */
+.brand{min-height:44px}
+.footer-brand .brand{min-height:0}
