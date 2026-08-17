@@ -99,30 +99,32 @@ def header(depth, active=""):
         for s in SERVICES
     )
     return f"""<header class="site-header" id="siteHeader">
-  <div class="container header-inner">
-    <a href="{r}" class="brand" aria-label="{SITE['name']} home">
-      {LOGO}
-      <span class="brand-word">Dsignzhub</span>
-    </a>
+  <div class="container">
+    <div class="header-inner">
+      <a href="{r}" class="brand" aria-label="{SITE['name']} home">
+        {LOGO}
+        <span class="brand-word">Dsignzhub</span>
+      </a>
 
-    <nav class="nav-desktop" aria-label="Primary">
-      <div class="has-drop">
-        <a href="{r}services/"{cls('services')} aria-haspopup="true" aria-expanded="false">Services
-          <svg viewBox="0 0 12 8" class="caret" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </a>
-        <div class="drop">
-          <ul>{items}</ul>
+      <nav class="nav-desktop" aria-label="Primary">
+        <div class="has-drop">
+          <a href="{r}services/"{cls('services')} aria-haspopup="true" aria-expanded="false">Services
+            <svg viewBox="0 0 12 8" class="caret" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </a>
+          <div class="drop"><ul>{items}</ul></div>
         </div>
-      </div>
-      <a href="{r}about/"{cls('about')}>About</a>
-      <a href="{r}contact/"{cls('contact')}>Contact</a>
-    </nav>
+        <a href="{r}#work">Work</a>
+        <a href="{r}#process">Process</a>
+        <a href="{r}about/"{cls('about')}>About</a>
+        <a href="{r}contact/"{cls('contact')}>Contact Us</a>
+      </nav>
 
-    <div class="header-actions">
-      <a href="{r}contact/" class="btn btn-primary btn-sm">Get In Touch</a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="header-actions">
+        <a href="{r}contact/" class="btn btn-primary btn-sm">Book a Call</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </div>
 </header>
@@ -132,14 +134,16 @@ def header(depth, active=""):
     <a href="{r}">Home</a>
     <button class="m-drop-toggle" id="mDropToggle" aria-expanded="false" aria-controls="mDropList">
       Services
-      <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
     </button>
     <div class="m-drop" id="mDropList"><ul>{items}</ul></div>
+    <a href="{r}#work">Work</a>
+    <a href="{r}#process">Process</a>
     <a href="{r}about/">About</a>
-    <a href="{r}contact/">Contact</a>
+    <a href="{r}contact/">Contact Us</a>
   </nav>
   <div class="mobile-menu-footer">
-    <a href="{r}contact/" class="btn btn-primary">Start a Project</a>
+    <a href="{r}contact/" class="btn btn-primary">Book a Call</a>
     <p>{SITE['email']}</p>
   </div>
 </div>
@@ -442,6 +446,9 @@ def home():
           <p>{esc(d)}</p>
         </div>""" for i, (t, d) in enumerate(PROCESS))
 
+    logos = "".join(f'<span class="logo-item">{n}</span>' for n in ['WordPress', 'Shopify', 'WooCommerce', 'React', 'Next.js', 'Webflow', 'Figma'])
+    logos2 = "".join(f'<span class="logo-item">{n}</span>' for n in ['Google Ads', 'Meta Ads', 'Google Analytics', 'Search Console', 'Razorpay', 'Mailchimp', 'HubSpot'])
+
     marquee_items = "".join(
         f"<span>{esc(s['nav'])}</span><span aria-hidden='true'>&bull;</span>" for s in SERVICES)
 
@@ -459,37 +466,39 @@ def home():
 
     return head(title, meta, "", depth, [org_ld, site_ld]) + header(depth, "home") + f"""
 <section class="hero">
-  <div class="container">
-    <h1 class="display reveal">Every digital service<br>your business needs,<br><span class="grad-text">under one roof</span></h1>
-    <p class="lede reveal">Websites, online stores, SEO, Google Ads and branding &mdash; designed, built and
-      marketed by one team, so nothing falls through the gap between agencies.</p>
-    <div class="hero-cta reveal">
-      <a href="{r}contact/" class="btn btn-primary">Get a Free Quote</a>
-      <a href="{r}services/" class="btn btn-ghost">Explore Services</a>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <h1 class="display reveal">Every digital service your business needs, <span class="grad-text">under one roof</span></h1>
+      <p class="lede reveal">Websites, online stores, SEO, Google Ads and branding &mdash; designed, built and
+        marketed by one team, so nothing falls through the gap between agencies.</p>
+      <div class="hero-cta reveal">
+        <a href="{r}contact/" class="btn btn-primary btn-lg">Book a Call</a>
+        <p class="hero-note">Design, build, rank and advertise &mdash;<br>handled by a single team.</p>
+      </div>
     </div>
-    <p class="hero-note reveal">Nine services &middot; Mobile-first builds &middot; Made in India</p>
 
-    <div class="hero-visual reveal" aria-hidden="true">
-      <div class="orbit-card">
-        <svg class="orbit-ring" viewBox="0 0 200 200" fill="none">
-          <circle cx="100" cy="100" r="95" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 9"/>
-          <circle cx="100" cy="100" r="68" stroke="rgba(210,120,254,0.28)" stroke-width="1"/>
-        </svg>
-        <svg class="orbit-mark" viewBox="0 0 100 100" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>
-        <span class="orbit-node n1">Web</span>
-        <span class="orbit-node n2">SEO</span>
-        <span class="orbit-node n3">Ads</span>
-        <span class="orbit-node n4">Brand</span>
-        <span class="orbit-node n5">Shop</span>
-        <span class="orbit-node n6">Social</span>
+    <div class="hero-art reveal" aria-hidden="true">
+      <div class="hero-shot hero-shot--a"><img src="{r}assets/work/dashboard.svg" alt="" width="560" height="380"></div>
+      <div class="hero-shot hero-shot--b"><img src="{r}assets/work/ecommerce.svg" alt="" width="560" height="380"></div>
+      <div class="hero-badge">
+        <span class="hero-badge-n">9</span>
+        <span class="hero-badge-l">services<br>on tap</span>
       </div>
     </div>
   </div>
 </section>
 
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">{marquee_items}{marquee_items}</div>
-</div>
+<section class="logos">
+  <div class="container">
+    <p class="logos-title reveal">Built on the platforms your customers already use</p>
+  </div>
+  <div class="logo-row" aria-hidden="true">
+    <div class="logo-track">{logos}{logos}</div>
+  </div>
+  <div class="logo-row" aria-hidden="true">
+    <div class="logo-track logo-track--rev">{logos2}{logos2}</div>
+  </div>
+</section>
 
 <section class="stats">
   <div class="container stats-grid">{stats}</div>
@@ -538,7 +547,7 @@ def home():
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="process">
   <div class="container">
     <div class="sec-head">
       <span class="eyebrow reveal">How we work</span>
