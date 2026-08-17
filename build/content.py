@@ -387,3 +387,35 @@ WHY_US = [
     ("data", "Data-driven decisions", "We track what matters and adjust based on real performance, not guesswork."),
     ("shield", "You own everything", "Code, domains, ad accounts and source files stay yours, including if you leave."),
 ]
+
+
+# --------------------------------------------------------------------------
+# Homepage blocks for the redesign.
+# STATS and VOICES are illustrative placeholders — swap in real figures and
+# real things clients have said before promoting the site.
+# --------------------------------------------------------------------------
+PILLARS = [
+    ("team", "Every channel, one team",
+     "Instead of juggling one agency for SEO, another for design and a freelancer for ads, you get a single team that talks to itself. Strategy and execution stay connected."),
+    ("data", "Decisions from data",
+     "Tracking is configured properly from day one, so we can tell you which channel produced which enquiry — and cut what isn't working before it drains the budget."),
+    ("shield", "Clarity and control",
+     "Fixed scope, fixed quote, and work you can see progressing. No hidden hours, no surprise invoices, and everything we build stays yours."),
+]
+
+STATS = [
+    ("9", "Services on tap", "Design, build and marketing handled by one team."),
+    ("100%", "Mobile-first", "Every build starts at the phone, where your customers actually are."),
+    ("24h", "Quote turnaround", "Scope, timeline and a fixed price, usually within a working day."),
+    ("0", "Lock-in", "Code, domains and ad accounts stay in your name."),
+]
+
+# Objections we actually hear — written as the prospect's own words.
+VOICES = [
+    "Our website looks fine on desktop but falls apart on a phone.",
+    "We're paying for ads and have no idea which ones bring enquiries.",
+    "Every agency sends a report full of numbers that mean nothing to me.",
+    "Our brand looks different on every platform we post to.",
+    "We rank nowhere for the things our customers actually search.",
+    "The last developer disappeared and we can't edit our own site.",
+]

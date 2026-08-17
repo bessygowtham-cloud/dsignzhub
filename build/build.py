@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content import (SITE, SERVICES, PROCESS, SERVICE_BY_SLUG,  # noqa: E402
-                     SHOWCASE, STATS, WHY_US)
+                     SHOWCASE, STATS, WHY_US, PILLARS, VOICES)
 from icons import sprite, icon  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -77,11 +77,10 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 <link rel="icon" type="image/svg+xml" href="{r}assets/logo-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;450;500;600&family=Inter:wght@400;450;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{r}css/style.css?v={CSS_V}">{blocks}
 </head>
 <body>
-<div class="noise"></div>
 {sprite_markup}
 <a href="#main" class="skip-link">Skip to content</a>
 """
@@ -395,26 +394,28 @@ def services_index():
 def home():
     depth = 0
     r = rel(depth)
-    cards = "".join(f"""
-      <a class="service-card reveal" href="{r}services/{s['slug']}/">
-        <span class="glass-ico">{icon(s['slug'])}</span>
-        <h3>{esc(s['nav'])}</h3>
-        <p>{esc(s['lede'][:105].rsplit(' ', 1)[0])}…</p>
-        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      </a>""" for s in SERVICES)
 
-    steps = "".join(f"""
-        <div class="step reveal">
-          <span class="step-num">{i+1:02d}</span>
+    pillars = "".join(f"""
+        <article class="pillar reveal">
+          <span class="glass-ico">{icon(ic)}</span>
           <h3>{esc(t)}</h3>
           <p>{esc(d)}</p>
-        </div>""" for i, (t, d) in enumerate(PROCESS))
+        </article>""" for ic, t, d in PILLARS)
 
     stats = "".join(f"""
         <div class="stat reveal">
           <span class="stat-n">{esc(n)}</span>
           <span class="stat-l">{esc(l)}</span>
-        </div>""" for n, l in STATS)
+          <p>{esc(d)}</p>
+        </div>""" for n, l, d in STATS)
+
+    cards = "".join(f"""
+      <a class="service-card reveal" href="{r}services/{s['slug']}/">
+        <span class="glass-ico">{icon(s['slug'])}</span>
+        <h3>{esc(s['nav'])}</h3>
+        <p>{esc(s['lede'][:104].rsplit(' ', 1)[0])}&hellip;</p>
+        <span class="rel-go">Explore <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </a>""" for s in SERVICES)
 
     work = "".join(f"""
         <article class="work-card reveal">
@@ -428,60 +429,60 @@ def home():
           </div>
         </article>""" for name, tag, img, desc in SHOWCASE)
 
-    why = "".join(f"""
-        <div class="why-card reveal">
-          <span class="glass-ico">{icon(ic)}</span>
+    voices = "".join(f"""
+        <blockquote class="voice reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-quote"/></svg>
+          <p>&ldquo;{esc(v)}&rdquo;</p>
+        </blockquote>""" for v in VOICES)
+
+    steps = "".join(f"""
+        <div class="step reveal">
+          <span class="step-num">{i+1:02d}</span>
           <h3>{esc(t)}</h3>
           <p>{esc(d)}</p>
-        </div>""" for ic, t, d in WHY_US)
+        </div>""" for i, (t, d) in enumerate(PROCESS))
 
-    marquee_items = "".join(f"<span>{esc(s['nav'])}</span><span aria-hidden='true'>•</span>" for s in SERVICES)
+    marquee_items = "".join(
+        f"<span>{esc(s['nav'])}</span><span aria-hidden='true'>&bull;</span>" for s in SERVICES)
 
     org_ld = {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": SITE["name"],
-        "url": SITE["domain"] + "/",
-        "email": SITE["email"],
-        "description": SITE["tagline"],
-        "areaServed": {"@type": "Country", "name": "India"},
+        "@context": "https://schema.org", "@type": "Organization",
+        "name": SITE["name"], "url": SITE["domain"] + "/", "email": SITE["email"],
+        "description": SITE["tagline"], "areaServed": {"@type": "Country", "name": "India"},
     }
-    site_ld = {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": SITE["name"],
-        "url": SITE["domain"] + "/",
-    }
+    site_ld = {"@context": "https://schema.org", "@type": "WebSite",
+               "name": SITE["name"], "url": SITE["domain"] + "/"}
 
-    title = "Web Design, Development, SEO & Marketing in India | Dsignzhub"
+    title = "Dsignzhub | Web Design, Development, SEO & Digital Marketing in India"
     meta = ("Dsignzhub builds websites, online stores and marketing that grow Indian businesses. "
             "Website design and development, PWAs, e-commerce, SEO, Google Ads and branding.")
 
     return head(title, meta, "", depth, [org_ld, site_ld]) + header(depth, "home") + f"""
 <section class="hero">
-  <div class="container hero-inner">
-    <p class="eyebrow reveal">Digital solutions for Indian businesses</p>
-    <h1 class="hero-title reveal">WE BUILD DIGITAL<br>PRESENCE THAT <span class="text-gradient">GROWS</span><br>YOUR BUSINESS</h1>
-    <p class="hero-sub reveal">Website &amp; app development, e-commerce, SEO, Google Ads and branding — combined into one digital system that gets Indian businesses found, chosen and remembered.</p>
+  <div class="container">
+    <h1 class="display reveal">Every digital service<br>your business needs,<br><span class="grad-text">under one roof</span></h1>
+    <p class="lede reveal">Websites, online stores, SEO, Google Ads and branding &mdash; designed, built and
+      marketed by one team, so nothing falls through the gap between agencies.</p>
     <div class="hero-cta reveal">
-      <a href="{r}contact/" class="btn btn-primary">Start a Project</a>
+      <a href="{r}contact/" class="btn btn-primary">Get a Free Quote</a>
       <a href="{r}services/" class="btn btn-ghost">Explore Services</a>
     </div>
-  </div>
+    <p class="hero-note reveal">Nine services &middot; Mobile-first builds &middot; Made in India</p>
 
-  <div class="hero-visual" aria-hidden="true">
-    <div class="orbit-card">
-      <svg class="orbit-ring" viewBox="0 0 200 200" fill="none">
-        <circle cx="100" cy="100" r="94" stroke="rgba(255,255,255,0.14)" stroke-width="1" stroke-dasharray="3 9"/>
-        <circle cx="100" cy="100" r="68" stroke="rgba(139,123,255,0.28)" stroke-width="1"/>
-      </svg>
-      <img src="{r}assets/logo-icon.svg" alt="" class="orbit-mark">
-      <span class="orbit-node n1">Web</span>
-      <span class="orbit-node n2">SEO</span>
-      <span class="orbit-node n3">Ads</span>
-      <span class="orbit-node n4">Brand</span>
-      <span class="orbit-node n5">Shop</span>
-      <span class="orbit-node n6">Social</span>
+    <div class="hero-visual reveal" aria-hidden="true">
+      <div class="orbit-card">
+        <svg class="orbit-ring" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="95" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 9"/>
+          <circle cx="100" cy="100" r="68" stroke="rgba(210,120,254,0.28)" stroke-width="1"/>
+        </svg>
+        <svg class="orbit-mark" viewBox="0 0 100 100" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>
+        <span class="orbit-node n1">Web</span>
+        <span class="orbit-node n2">SEO</span>
+        <span class="orbit-node n3">Ads</span>
+        <span class="orbit-node n4">Brand</span>
+        <span class="orbit-node n5">Shop</span>
+        <span class="orbit-node n6">Social</span>
+      </div>
     </div>
   </div>
 </section>
@@ -490,47 +491,64 @@ def home():
   <div class="marquee-track">{marquee_items}{marquee_items}</div>
 </div>
 
-<section class="stats-band">
+<section class="stats">
   <div class="container stats-grid">{stats}</div>
 </section>
 
-<section class="about container">
-  <div class="about-grid">
-    <p class="section-label reveal">Who we are</p>
-    <div class="about-content">
-      <h2 class="about-statement reveal">End-to-end digital solutions for businesses that want to be found, chosen and remembered online.</h2>
-      <p class="about-text reveal">We combine creative design, strategic thinking and data-driven marketing to help Indian businesses build a powerful and lasting online presence — from engaging websites and high-performing online stores to stronger search visibility, qualified leads and memorable brands.</p>
-    </div>
-  </div>
-</section>
-
-<section class="services container" id="services">
-  <p class="section-label reveal">What we do</p>
-  <h2 class="section-title reveal">Our Services</h2>
-  <div class="services-grid">{cards}</div>
-</section>
-
-<section class="work container" id="work">
-  <p class="section-label reveal">Selected work</p>
-  <h2 class="section-title reveal">Projects we build</h2>
-  <div class="work-grid">{work}</div>
-</section>
-
-<section class="why-us" id="why-us">
+<section class="sec">
   <div class="container">
-    <p class="section-label reveal">Why Dsignzhub</p>
-    <h2 class="section-title reveal">Built for businesses that want results, not just visuals</h2>
-    <div class="why-grid">{why}</div>
+    <div class="sec-head">
+      <span class="eyebrow reveal">Full coverage</span>
+      <h2 class="display reveal">One team, not five vendors</h2>
+      <p class="lede reveal">Most businesses lose time and money in the gaps between their designer,
+        their developer and their marketer. We close those gaps by doing all three.</p>
+    </div>
+    <div class="pillars">{pillars}</div>
   </div>
 </section>
 
-<section class="svc-section container">
-  <p class="section-label reveal">How we work</p>
-  <h2 class="section-title reveal">Our Approach</h2>
-  <div class="approach-steps">{steps}</div>
+<section class="sec" id="services">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow reveal">What we do</span>
+      <h2 class="display reveal">Services</h2>
+      <p class="lede reveal">Everything needed to get found, chosen and remembered online.</p>
+    </div>
+    <div class="services-grid">{cards}</div>
+  </div>
 </section>
 
-{cta(depth, "Let's build something great for your business.", "Tell us a bit about your project and we'll get back to you shortly.")}
+<section class="sec" id="work">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Selected work</span>
+      <h2 class="display reveal">What we build</h2>
+    </div>
+    <div class="work-grid">{work}</div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Sound familiar?</span>
+      <h2 class="display reveal">Problems we hear<br>before people call us</h2>
+    </div>
+    <div class="voices">{voices}</div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow reveal">How we work</span>
+      <h2 class="display reveal">A process without surprises</h2>
+    </div>
+    <div class="approach-steps">{steps}</div>
+  </div>
+</section>
+
+{cta(depth, "Ready to build something that works?", "Tell us about your project and we will come back with a clear scope, a timeline and a fixed quote.")}
 """ + footer(depth)
 
 
