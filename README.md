@@ -107,6 +107,9 @@ entirely under `prefers-reduced-motion: reduce`.
 
 - **Contact form has no backend.** It opens the visitor's mail client via `mailto:`.
   Wire it to Formspree, Web3Forms or a serverless function before launch.
-- **Placeholder contact details** — `hello@dsignzhub.com` and `+91 00000 00000` in
-  `build/content.py` need replacing with the real ones.
+- **Placeholder email** — `hello@dsignzhub.com` in `build/content.py` needs replacing
+  with the real inbox. The phone number is live.
+- **Placeholder pricing** — the amounts in `PRICING` (build/content.py) are
+  illustrative; confirm them before promoting the site.
+- **Social links** — the `SOCIALS` entries point at `#`; add the real profile URLs.
 - No blog, case studies or testimonials yet.

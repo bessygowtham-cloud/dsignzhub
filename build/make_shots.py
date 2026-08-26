@@ -12,8 +12,9 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "work")
 
-V1, V2, AM = "#6a5cff", "#8b7bff", "#ffb020"
-INK, PANEL, LINE = "#0b0b14", "#171728", "rgba(255,255,255,0.10)"
+# palette follows the live design system (blue -> purple, amber only as a highlight)
+V1, V2, AM = "#2d69fb", "#8f6cff", "#d278fe"
+INK, PANEL, LINE = "#05050a", "#121218", "rgba(255,255,255,0.12)"
 
 
 def frame(inner, w=560, h=380, tint=V1):

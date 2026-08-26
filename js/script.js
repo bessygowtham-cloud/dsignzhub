@@ -151,9 +151,9 @@ if (finePointer && !reducedMotion) {
     el.addEventListener('pointerleave', () => setRing(null));
   });
 
-  document.querySelectorAll('.service-card, .d-card, .s-card, .rel-card').forEach((card) => {
-    card.addEventListener('pointerenter', () => setRing('label', 'Explore'));
-    card.addEventListener('pointerleave', () => setRing(null));
+  // Pointer-tracked glow on cards. The cursor keeps its plain link state here —
+  // the oversized 'Explore' disc was more distracting than useful.
+  document.querySelectorAll('.service-card, .d-card, .s-card, .rel-card, .price-card, .work-card').forEach((card) => {
     card.addEventListener('pointermove', (e) => {
       const r = card.getBoundingClientRect();
       card.style.setProperty('--cx', `${e.clientX - r.left}px`);

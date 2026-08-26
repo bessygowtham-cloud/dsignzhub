@@ -5,8 +5,8 @@ SITE = {
     "name": "Dsignzhub",
     "domain": "https://www.dsignzhub.com",
     "email": "hello@dsignzhub.com",
-    "phone_display": "+91 00000 00000",
-    "phone_href": "+910000000000",
+    "phone_display": "+91 86672 53891",
+    "phone_href": "+918667253891",
     "tagline": "Digital design, development & marketing for Indian businesses.",
 }
 
@@ -418,4 +418,73 @@ VOICES = [
     "Our brand looks different on every platform we post to.",
     "We rank nowhere for the things our customers actually search.",
     "The last developer disappeared and we can't edit our own site.",
+]
+
+
+# --------------------------------------------------------------------------
+# Pricing.
+# PLACEHOLDER AMOUNTS — confirm these against what you actually charge before
+# promoting the site. Everything else on the page is real; these numbers are not.
+# --------------------------------------------------------------------------
+PRICING = [
+    {
+        "name": "Starter",
+        "meta": "Best for a first website",
+        "price": "₹24,999",
+        "unit": "/ project",
+        "featured": False,
+        "points": [
+            "Up to 5 custom-designed pages",
+            "Mobile-first, SEO-ready build",
+            "Contact form and Google Analytics",
+            "2 rounds of revisions",
+        ],
+    },
+    {
+        "name": "Growth",
+        "meta": "Website plus monthly marketing",
+        "price": "₹49,999",
+        "unit": "/ month",
+        "featured": True,
+        "points": [
+            "Everything in Starter",
+            "SEO and Google Ads management",
+            "Social media creative each month",
+            "Monthly reporting on cost per lead",
+        ],
+    },
+    {
+        "name": "Scale",
+        "meta": "E-commerce and multi-channel",
+        "price": "₹99,999",
+        "unit": "/ month",
+        "featured": False,
+        "points": [
+            "Everything in Growth",
+            "Online store build and management",
+            "Payment gateway and logistics setup",
+            "Conversion rate optimisation",
+        ],
+    },
+    {
+        "name": "Enterprise",
+        "meta": "Custom scope, dedicated team",
+        "price": "Let's talk",
+        "unit": "",
+        "featured": False,
+        "points": [
+            "Custom application development",
+            "Full brand and identity programme",
+            "Dedicated project manager",
+            "Priority support and SLAs",
+        ],
+    },
+]
+
+# Footer social links. Replace the '#' placeholders with the real profile URLs.
+SOCIALS = [
+    ("linkedin", "LinkedIn", "#"),
+    ("instagram", "Instagram", "#"),
+    ("facebook", "Facebook", "#"),
+    ("whatsapp", "WhatsApp", "https://wa.me/918667253891"),
 ]

@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.dsignzhub.com/</loc><priority>1.0</priority></url>
   <url><loc>https://www.dsignzhub.com/services/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.dsignzhub.com/pricing/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/about/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/contact/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/services/website-design-development/</loc><priority>0.8</priority></url>

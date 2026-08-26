@@ -13,7 +13,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content import (SITE, SERVICES, PROCESS, SERVICE_BY_SLUG,  # noqa: E402
-                     SHOWCASE, STATS, WHY_US, PILLARS, VOICES)
+                     SHOWCASE, STATS, WHY_US, PILLARS, VOICES,
+                     PRICING, SOCIALS)
 from icons import sprite, icon  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -115,6 +116,7 @@ def header(depth, active=""):
         </div>
         <a href="{r}#work">Work</a>
         <a href="{r}#process">Process</a>
+        <a href="{r}pricing/"{cls('pricing')}>Pricing</a>
         <a href="{r}about/"{cls('about')}>About</a>
         <a href="{r}contact/"{cls('contact')}>Contact Us</a>
       </nav>
@@ -139,6 +141,7 @@ def header(depth, active=""):
     <div class="m-drop" id="mDropList"><ul>{items}</ul></div>
     <a href="{r}#work">Work</a>
     <a href="{r}#process">Process</a>
+    <a href="{r}pricing/">Pricing</a>
     <a href="{r}about/">About</a>
     <a href="{r}contact/">Contact Us</a>
   </nav>
@@ -156,6 +159,11 @@ def footer(depth):
     svc_links = "".join(
         f'<a href="{r}services/{s["slug"]}/">{esc(s["nav"])}</a>' for s in SERVICES[:5]
     )
+    socials = "".join(
+        f'<a class="social" href="{url}" aria-label="{esc(label)}"'
+        f'{" target=_blank rel=noopener" if url.startswith("http") else ""}>{icon(key)}</a>'
+        for key, label, url in SOCIALS
+    )
     return f"""</main>
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -170,13 +178,16 @@ def footer(depth):
     </div>
     <div class="footer-col">
       <h4>Company</h4>
+      <a href="{r}pricing/">Pricing</a>
       <a href="{r}about/">About</a>
-      <a href="{r}contact/">Contact</a>
+      <a href="{r}contact/">Contact Us</a>
     </div>
     <div class="footer-col">
       <h4>Connect</h4>
       <a href="mailto:{SITE['email']}">{SITE['email']}</a>
       <a href="tel:{SITE['phone_href']}">{SITE['phone_display']}</a>
+      <div class="socials">{socials}</div>
+      <a href="mailto:{SITE['email']}" class="btn btn-primary btn-sm footer-cta">Send Message</a>
     </div>
   </div>
   <div class="container footer-bottom">
@@ -360,6 +371,55 @@ def service_page(svc):
 """ + footer(depth)
 
 
+def pricing_cards(depth):
+    r = rel(depth)
+    out = ""
+    for tier in PRICING:
+        pts = "".join(f"<li>{esc(x)}</li>" for x in tier["points"])
+        feat = " is-featured" if tier["featured"] else ""
+        tag = '<span class="price-tag">Most popular</span>' if tier["featured"] else ""
+        out += f"""
+        <article class="price-card{feat} reveal">
+          {tag}
+          <h3>{esc(tier['name'])}</h3>
+          <p class="price-meta">{esc(tier['meta'])}</p>
+          <p class="price-amt">{esc(tier['price'])}<span>{esc(tier['unit'])}</span></p>
+          <ul class="price-list">{pts}</ul>
+          <a href="{r}contact/" class="btn {'btn-primary' if tier['featured'] else 'btn-ghost'} price-btn">Book a call</a>
+        </article>"""
+    return out
+
+
+def pricing_page():
+    depth = 1
+    title = "Pricing | Website, SEO & Marketing Packages in India | Dsignzhub"
+    meta = ("Transparent pricing for website design, e-commerce, SEO, Google Ads and branding. "
+            "Fixed quotes in Indian rupees, with no lock-in.")
+    lds = [crumb_jsonld([("Home", ""), ("Pricing", "pricing")])]
+    return head(title, meta, "pricing/", depth, lds) + header(depth, "pricing") + f"""
+{breadcrumb(depth, [("Pricing", None)])}
+
+<section class="svc-hero">
+  <div class="container">
+    <p class="eyebrow reveal">Pricing</p>
+    <h1 class="svc-h1 reveal">Select your plan</h1>
+    <p class="svc-lede reveal">Straightforward packages in rupees. Every plan is a fixed quote after a
+      short scoping call &mdash; you will never get an invoice you did not expect.</p>
+  </div>
+</section>
+
+<section class="sec--tight">
+  <div class="container">
+    <div class="price-grid">{pricing_cards(depth)}</div>
+    <p class="price-note reveal">Need something outside these? Most of our work is scoped to the
+      brief. Tell us what you need and we will quote it properly.</p>
+  </div>
+</section>
+
+{cta(depth, "Not sure which plan fits?", "Tell us your goal and budget, and we will tell you honestly what will move the needle.")}
+""" + footer(depth)
+
+
 def services_index():
     depth = 1
     r = rel(depth)
@@ -446,9 +506,6 @@ def home():
           <p>{esc(d)}</p>
         </div>""" for i, (t, d) in enumerate(PROCESS))
 
-    logos = "".join(f'<span class="logo-item">{n}</span>' for n in ['WordPress', 'Shopify', 'WooCommerce', 'React', 'Next.js', 'Webflow', 'Figma'])
-    logos2 = "".join(f'<span class="logo-item">{n}</span>' for n in ['Google Ads', 'Meta Ads', 'Google Analytics', 'Search Console', 'Razorpay', 'Mailchimp', 'HubSpot'])
-
     marquee_items = "".join(
         f"<span>{esc(s['nav'])}</span><span aria-hidden='true'>&bull;</span>" for s in SERVICES)
 
@@ -485,18 +542,6 @@ def home():
         <span class="hero-badge-l">services<br>on tap</span>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="logos">
-  <div class="container">
-    <p class="logos-title reveal">Built on the platforms your customers already use</p>
-  </div>
-  <div class="logo-row" aria-hidden="true">
-    <div class="logo-track">{logos}{logos}</div>
-  </div>
-  <div class="logo-row" aria-hidden="true">
-    <div class="logo-track logo-track--rev">{logos2}{logos2}</div>
   </div>
 </section>
 
@@ -544,6 +589,17 @@ def home():
       <h2 class="display reveal">Problems we hear<br>before people call us</h2>
     </div>
     <div class="voices">{voices}</div>
+  </div>
+</section>
+
+<section class="sec" id="pricing">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow reveal">Pricing</span>
+      <h2 class="display reveal">Select your plan</h2>
+      <p class="lede reveal">Transparent packages in rupees. Change or cancel whenever you need to.</p>
+    </div>
+    <div class="price-grid">{pricing_cards(depth)}</div>
   </div>
 </section>
 
@@ -693,11 +749,12 @@ def main():
     written.append(write("services/index.html", services_index()))
     written.append(write("about/index.html", about()))
     written.append(write("contact/index.html", contact()))
+    written.append(write("pricing/index.html", pricing_page()))
     for svc in SERVICES:
         written.append(write(f"services/{svc['slug']}/index.html", service_page(svc)))
 
     # sitemap + robots
-    urls = [""] + ["services/", "about/", "contact/"] + [f"services/{s['slug']}/" for s in SERVICES]
+    urls = [""] + ["services/", "pricing/", "about/", "contact/"] + [f"services/{s['slug']}/" for s in SERVICES]
     body = "".join(
         f"\n  <url><loc>{SITE['domain']}/{u}</loc><priority>{'1.0' if u == '' else '0.8'}</priority></url>"
         for u in urls
