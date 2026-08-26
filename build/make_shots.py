@@ -1,243 +1,282 @@
 #!/usr/bin/env python3
-"""Renders the project-showcase artwork in assets/work/ as real PNGs.
+"""Bakes the project-showcase images as 3D clay renders.
 
-Each scene is laid out in HTML/CSS inside a proper device frame — browser
-chrome, bezels, contact shadows, screen glare — then screenshotted with headless
-Chrome at 2x. That reads as a product shot rather than a flat wireframe.
+Each scene is composed from three.js primitives — matte materials, a broad
+studio key light, real cast shadows and a gradient backdrop — then rendered in
+headless Chrome and screenshotted. That gives the modern 3D product-render look
+rather than flat vector art, without needing downloaded models or photography.
 
-What this cannot do is supply photography. Product tiles and imagery are
-rendered as gradient art. Drop real screenshots or licensed photos into
-assets/work/ using the same filenames and they take over.
+Software rendering (SwiftShader) is slow, so expect ~30-60s per scene.
 
-Run: python3 build/make_shots.py
+Run: python3 build/make_shots.py [scene ...]
 """
+import http.server
 import os
 import shutil
+import socketserver
 import subprocess
+import sys
 import tempfile
+import threading
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "assets", "work")
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+W, H = 1120, 760
+PORT = 4771
 
-W, H = 1120, 760          # rendered at 2x, displayed at 560x380
-BLUE, PURPLE = "#2d69fb", "#d278fe"
+IMPORTMAP = """
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+}}
+</script>"""
 
-BASE = """<meta charset="utf-8">
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{width:WWpx;height:HHpx;overflow:hidden;font-family:Inter,system-ui,sans-serif;
-  background:radial-gradient(120% 100% at 20% 0%,#1b2350 0%,#0a0c1c 45%,#05050a 100%);
-  display:flex;align-items:center;justify-content:center}
-.stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.stage::before{content:'';position:absolute;width:80%;height:70%;top:-12%;left:10%;
-  background:radial-gradient(circle,rgba(90,130,255,.30),transparent 65%);filter:blur(30px)}
-.stage::after{content:'';position:absolute;width:52%;height:52%;bottom:-8%;right:2%;
-  background:radial-gradient(circle,rgba(210,120,254,.26),transparent 65%);filter:blur(34px)}
+PAGE = """<!doctype html><meta charset="utf-8"><title>rendering</title>
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}</style>
+%(map)s
+<script type="module">
+import * as THREE from 'three';
+import { makeStage, finish, box, cyl, ball, torus, panel, clay, P } from './scene3d.js';
+const W=%(W)s, H=%(H)s;
+%(body)s
+</script>
+"""
 
-.win{position:relative;width:84%;border-radius:16px;overflow:hidden;background:#0e1018;
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 60px 120px -30px rgba(0,0,0,.95),0 20px 50px -20px rgba(0,0,0,.8),
-             inset 0 1px 0 rgba(255,255,255,.12)}
-.bar{height:44px;display:flex;align-items:center;gap:8px;padding:0 16px;
-  background:linear-gradient(180deg,#20232f,#171a24);border-bottom:1px solid rgba(255,255,255,.08)}
-.dot{width:11px;height:11px;border-radius:50%}
-.url{flex:1;height:24px;margin-left:14px;border-radius:7px;background:#0d0f16;
-  border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;padding:0 12px;
-  font-size:11.5px;color:#7d8497}
-.screen{position:relative;background:#0a0c14;padding:22px}
-.win::after{content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(115deg,rgba(255,255,255,.10) 0%,transparent 34%,transparent 66%,rgba(255,255,255,.045) 100%)}
+# ---------------------------------------------------------------- scenes
+# Palette stays in the site's blue/violet family with warm accents, so the
+# renders sit on the dark UI instead of fighting it.
+BG1, BG2 = "'#efeaff'", "'#c4b8e4'"
 
-.phone{position:relative;width:212px;border-radius:34px;padding:9px;background:#15161d;
-  border:1px solid rgba(255,255,255,.16);
-  box-shadow:0 50px 90px -26px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.16)}
-.phone .inner{border-radius:26px;overflow:hidden;background:#0a0c14;height:388px;position:relative}
-.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:78px;height:20px;
-  border-radius:12px;background:#000;z-index:3}
-.t{font-family:'Inter Tight',Inter,sans-serif}
-</style>
-""".replace("WW", str(W)).replace("HH", str(H))
+SCENES = {}
 
+SCENES["ecommerce"] = """
+const S = makeStage({bg1:__BG1__, bg2:__BG2__, w:W, h:H});
+const g = S.root;
 
-def dots():
-    return ('<span class="dot" style="background:#ff5f57"></span>'
-            '<span class="dot" style="background:#febc2e"></span>'
-            '<span class="dot" style="background:#28c840"></span>')
+// --- shopping bag: reads instantly, unlike a cart built from primitives ---
+const bag = new THREE.Group();
+const body2 = box(2.5,2.6,1.35,P.coral,{r:0.1,rough:0.75});
+body2.position.y = 1.3; bag.add(body2);
+const lip = box(2.56,0.22,1.42,P.cream,{r:0.07}); lip.position.y=2.6; bag.add(lip);
+[[-0.62],[0.62]].forEach(([x])=>{
+  const hd = torus(0.42,0.07,P.cream); hd.position.set(x,2.72,0);
+  hd.rotation.x = Math.PI/2; hd.scale.set(1,0.75,1); bag.add(hd); });
+bag.position.set(-1.0,0,2.4); bag.rotation.y=0.38; g.add(bag);
 
+// items peeking out of the bag
+const it1 = box(0.62,0.9,0.62,P.blue,{r:0.09}); it1.position.set(-1.5,3.0,2.35); it1.rotation.set(0.1,0.4,0.12); g.add(it1);
+const it2 = cyl(0.26,0.26,0.8,P.amber,28); it2.position.set(-0.6,2.95,2.2); it2.rotation.z=0.2; g.add(it2);
 
-def win(url, inner):
-    return (f'<div class="win"><div class="bar">{dots()}<div class="url">{url}</div></div>'
-            f'<div class="screen">{inner}</div></div>')
+// --- parcels, fanned so each one reads ---
+const b1 = box(2.3,2.3,2.3,P.coral,{r:0.14}); b1.position.set(-3.7,1.15,-0.6); b1.rotation.y=0.34; g.add(b1);
+const b2 = box(1.6,1.6,1.6,P.sand,{r:0.12});  b2.position.set(-1.9,0.8,-1.9); b2.rotation.y=-0.25; g.add(b2);
+const b3 = box(1.35,1.35,1.35,P.violet,{r:0.1}); b3.position.set(1.7,0.68,-2.5); b3.rotation.y=0.5; g.add(b3);
+const b4 = box(1.0,1.0,1.0,P.amber,{r:0.09}); b4.position.set(0.2,0.5,-1.4); b4.rotation.y=-0.55; g.add(b4);
 
+// --- tablet, angled into the light ---
+const tab = panel(2.7,3.5,P.slate,P.blue,0.22);
+tab.position.set(3.5,1.75,0.4); tab.rotation.set(-0.07,-0.5,0.03); g.add(tab);
 
-def tile(i, h=104):
-    """Stand-in for a product photo — layered gradient art, not a flat block."""
-    hues = [(BLUE, "#7aa2ff"), ("#7d5cff", PURPLE), ("#ff9f45", "#ffd08a"),
-            ("#3ddc97", "#9af5cd"), (PURPLE, "#ffb3ff"), ("#4d8dff", "#b9d0ff")]
-    a, b = hues[i % len(hues)]
-    return (f'<div style="height:{h}px;border-radius:10px;position:relative;overflow:hidden;'
-            f'background:linear-gradient(150deg,{a},{b})">'
-            f'<div style="position:absolute;inset:0;background:'
-            f'radial-gradient(70% 60% at 30% 20%,rgba(255,255,255,.45),transparent 60%),'
-            f'radial-gradient(50% 50% at 80% 90%,rgba(0,0,0,.35),transparent 60%)"></div></div>')
+// --- card + coin stack in front ---
+const card = box(1.5,0.1,1.0,P.purple,{r:0.06});
+card.position.set(1.9,0.06,2.9); card.rotation.y=-0.4; g.add(card);
+[0,1,2,3].forEach(i=>{ const c2=cyl(0.32,0.32,0.1,P.amber,32);
+  c2.position.set(-3.1,0.06+i*0.11,2.6); c2.rotation.y=i*0.3; g.add(c2); });
 
+g.position.y = -0.8;
+finish(S);
+"""
 
-def bar(w, h=8, c="rgba(255,255,255,.16)", mb=7):
-    return f'<div style="width:{w};height:{h}px;border-radius:4px;background:{c};margin-bottom:{mb}px"></div>'
+SCENES["dashboard"] = """
+const S = makeStage({bg1:__BG1__, bg2:__BG2__, w:W, h:H});
+const g = S.root;
 
+// main screen
+const scr = panel(6.6,4.3,P.slate,P.ink,0.26);
+scr.position.set(0,2.9,0); scr.rotation.set(-0.05,0.16,0); g.add(scr);
 
-def scene_ecommerce():
-    cards = "".join(
-        f'<div style="background:#111420;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:10px">'
-        f'{tile(i)}<div style="margin-top:10px">{bar("74%", 9, "rgba(255,255,255,.28)", 6)}'
-        f'{bar("42%", 8, "#7aa2ff", 0)}</div></div>' for i in range(8))
-    nav = "".join(bar("52px", 8, "rgba(255,255,255,.22)", 0) for _ in range(4))
-    inner = (
-        f'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">'
-        f'<div style="display:flex;gap:18px;align-items:center">'
-        f'<div style="width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,{BLUE},{PURPLE})"></div>'
-        f'<div style="display:flex;gap:14px">{nav}</div></div>'
-        f'<div style="width:74px;height:26px;border-radius:13px;background:linear-gradient(135deg,{BLUE},{PURPLE})"></div></div>'
-        f'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">{cards}</div>')
-    return win("shop.yourbrand.in", inner)
+// 3D bars rising out of the screen
+const vals=[1.1,1.8,1.4,2.5,2.1,3.2];
+vals.forEach((v,i)=>{
+  const c = i===3||i===5 ? P.amber : (i%2 ? P.blueLt : P.blue);
+  const b = box(0.62,v,0.62,c,{r:0.1});
+  b.position.set(-2.1+i*0.85, v/2+0.9, 1.9); g.add(b);
+});
+// platform under the bars
+const plate = box(6.2,0.3,1.5,P.cream,{r:0.1}); plate.position.set(0.05,0.75,1.9); g.add(plate);
 
+// floating KPI cards
+const c1 = box(1.9,1.1,0.14,P.cream,{r:0.12}); c1.position.set(-3.9,4.4,2.2); c1.rotation.set(0.05,0.5,0.06); g.add(c1);
+const c2 = box(1.7,1.0,0.14,P.violet,{r:0.12}); c2.position.set(4.0,3.6,2.0); c2.rotation.set(-0.05,-0.5,-0.05); g.add(c2);
 
-def scene_dashboard():
-    pts = [(0, 78), (1, 62), (2, 70), (3, 44), (4, 52), (5, 30), (6, 38), (7, 14)]
-    poly = " ".join(f"{40 + p[0] * 108},{170 - p[1] * 1.5:.0f}" for p in pts)
-    area = f"{poly} {40 + 7 * 108},175 40,175"
-    grid = "".join(f'<line x1="40" y1="{40 + i * 34}" x2="840" y2="{40 + i * 34}" stroke="rgba(255,255,255,.055)"/>'
-                   for i in range(5))
-    knobs = "".join(f'<circle cx="{40 + p[0] * 108}" cy="{170 - p[1] * 1.5:.0f}" r="4.5" fill="#fff"/>' for p in pts)
-    kpis = "".join(
-        f'<div style="flex:1;background:#111420;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px">'
-        f'<div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#7d8497">{label}</div>'
-        f'<div class="t" style="font-size:26px;font-weight:500;color:{col};margin-top:6px">{val}</div></div>'
-        for label, val, col in [("Revenue", "&#8377;18.4L", "#7aa2ff"),
-                                ("Orders", "2,318", PURPLE), ("ROAS", "4.2x", "#3ddc97")])
-    inner = (
-        f'<div style="display:flex;gap:12px;margin-bottom:16px">{kpis}</div>'
-        f'<div style="background:#111420;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px">'
-        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-        f'<div class="t" style="font-size:14px;color:#e7eaf3">Revenue, last 8 weeks</div>'
-        f'<div style="font-size:11px;color:#7d8497">Weekly</div></div>'
-        f'<svg viewBox="0 0 880 200" style="width:100%;height:190px">'
-        f'<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">'
-        f'<stop offset="0" stop-color="{BLUE}" stop-opacity=".45"/>'
-        f'<stop offset="1" stop-color="{BLUE}" stop-opacity="0"/></linearGradient></defs>'
-        f'{grid}<polygon points="{area}" fill="url(#g)"/>'
-        f'<polyline points="{poly}" fill="none" stroke="{BLUE}" stroke-width="3" '
-        f'stroke-linecap="round" stroke-linejoin="round"/>{knobs}</svg></div>')
-    return win("app.yourbrand.in/analytics", inner)
+// arrow ball trail
+[0,1,2].forEach(i=>{ const s=ball(0.2-i*0.04,P.amber); s.position.set(2.6+i*0.7,4.7+i*0.55,1.4); g.add(s); });
 
+g.position.y=-1.4;
+finish(S);
+"""
 
-def scene_branding():
-    sw = "".join(f'<div style="flex:1;height:78px;border-radius:10px;background:{c}"></div>'
-                 for c in [BLUE, "#7d5cff", PURPLE, "#f2f2f7"])
-    inner = (
-        f'<div style="display:grid;grid-template-columns:1.15fr 1fr;gap:14px">'
-        f'<div style="background:linear-gradient(150deg,{BLUE},{PURPLE});border-radius:14px;display:flex;'
-        f'align-items:center;justify-content:center;height:186px;position:relative;overflow:hidden">'
-        f'<div style="position:absolute;inset:0;background:radial-gradient(60% 60% at 30% 20%,rgba(255,255,255,.35),transparent 60%)"></div>'
-        f'<svg viewBox="0 0 100 100" style="width:88px;position:relative"><path fill="#fff" fill-rule="evenodd" '
-        f'd="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg></div>'
-        f'<div style="display:flex;flex-direction:column;gap:12px">'
-        f'<div style="display:flex;gap:10px">{sw}</div>'
-        f'<div style="flex:1;background:#111420;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px">'
-        f'<div class="t" style="font-size:30px;font-weight:500;color:#fff;letter-spacing:-.02em">Aa</div>'
-        f'<div style="margin-top:10px">{bar("85%")}{bar("62%")}</div></div></div></div>'
-        f'<div style="margin-top:14px;background:#111420;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:16px">'
-        f'{bar("55%", 10, "rgba(255,255,255,.26)")}{bar("78%")}{bar("40%", 8, "rgba(255,255,255,.12)", 0)}</div>')
-    return win("brand guidelines", inner)
+SCENES["branding"] = """
+const S = makeStage({bg1:__BG1__, bg2:__BG2__, w:W, h:H});
+const g = S.root;
 
+// logo plinth
+const plinth = box(3.2,3.2,0.5,P.blue,{r:0.18});
+plinth.position.set(-1.5,2.0,0); plinth.rotation.set(-0.04,0.3,0); g.add(plinth);
+// extruded Z sitting proud of it
+const zShape = new THREE.Shape();
+[[-0.9,0.9],[0.75,0.9],[0.75,0.45],[-0.2,-0.45],[0.75,-0.45],[0.75,-0.9],[-0.9,-0.9],[-0.9,-0.45],[0.05,0.45],[-0.9,0.45]]
+ .forEach((p,i)=> i? zShape.lineTo(p[0],p[1]) : zShape.moveTo(p[0],p[1]));
+zShape.closePath();
+const zGeo = new THREE.ExtrudeGeometry(zShape,{depth:0.34,bevelEnabled:true,bevelSize:0.05,bevelThickness:0.05,bevelSegments:3});
+zGeo.center();
+const zMesh = new THREE.Mesh(zGeo, clay(P.cream,{rough:0.5}));
+zMesh.castShadow=true; zMesh.position.set(-1.5,2.0,0.45); zMesh.rotation.set(-0.04,0.3,0); g.add(zMesh);
 
-def scene_pwa():
-    def phone(offset, scale, z):
-        rows = "".join(
-            f'<div style="display:flex;gap:9px;align-items:center;margin-bottom:11px">'
-            f'<div style="width:44px;height:44px;border-radius:10px;'
-            f'background:linear-gradient(140deg,{BLUE},{PURPLE});opacity:{0.55 + 0.12 * j}"></div>'
-            f'<div style="flex:1">{bar("78%", 8, "rgba(255,255,255,.24)", 5)}'
-            f'{bar("48%", 7, "rgba(255,255,255,.12)", 0)}</div></div>' for j in range(4))
-        return (
-            f'<div class="phone" style="transform:translateY({offset}px) scale({scale});z-index:{z}">'
-            f'<div class="notch"></div><div class="inner">'
-            f'<div style="height:118px;background:linear-gradient(150deg,{BLUE},{PURPLE});position:relative">'
-            f'<div style="position:absolute;inset:0;background:radial-gradient(70% 70% at 30% 20%,rgba(255,255,255,.4),transparent 60%)"></div></div>'
-            f'<div style="padding:14px">{rows}</div>'
-            f'<div style="position:absolute;left:14px;right:14px;bottom:14px;height:38px;border-radius:19px;'
-            f'background:linear-gradient(135deg,{BLUE},{PURPLE})"></div></div></div>')
-    return (f'<div style="display:flex;align-items:center;justify-content:center;gap:18px">'
-            f'{phone(26, .88, 1)}{phone(-14, 1.0, 3)}{phone(26, .88, 1)}</div>')
+// paint-pot swatches
+[[P.blue,0],[P.violet,1],[P.purple,2],[P.amber,3]].forEach(([c,i])=>{
+  const pot = cyl(0.52,0.46,1.5-i*0.12,c,36);
+  pot.position.set(1.9+i*1.15, (1.5-i*0.12)/2, 1.3-i*0.5); g.add(pot);
+  const lid = cyl(0.55,0.55,0.1,P.cream,36); lid.position.set(1.9+i*1.15,(1.5-i*0.12)+0.05,1.3-i*0.5); g.add(lid);
+});
 
+// stacked brand cards
+[0,1,2].forEach(i=>{
+  const card = box(2.6,0.12,1.7,i===0?P.cream:(i===1?P.sand:P.coral),{r:0.07});
+  card.position.set(-3.0,0.07+i*0.16,2.5); card.rotation.y=-0.32+i*0.06; g.add(card);
+});
 
-def scene_seo():
-    rows = ""
-    for i in range(4):
-        hi = i == 0
-        title = ('<div class="t" style="font-size:13.5px;color:#9fc0ff">yourbrand.in &mdash; official site</div>'
-                 if hi else bar("46%", 9, "rgba(255,255,255,.2)", 0))
-        rows += (
-            f'<div style="background:{"rgba(45,105,251,.14)" if hi else "#111420"};'
-            f'border:1px solid {"rgba(122,162,255,.45)" if hi else "rgba(255,255,255,.06)"};'
-            f'border-radius:11px;padding:14px 16px;margin-bottom:10px">'
-            f'<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">'
-            f'<div style="width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,{BLUE},{PURPLE})"></div>'
-            f'{title}</div>{bar("88%", 7, "rgba(255,255,255,.13)", 5)}'
-            f'{bar("66%", 7, "rgba(255,255,255,.10)", 0)}</div>')
-    inner = (
-        f'<div style="display:flex;align-items:center;gap:10px;background:#111420;'
-        f'border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:11px 16px;margin-bottom:16px">'
-        f'<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:{PURPLE};stroke-width:2">'
-        f'<circle cx="10.5" cy="10.5" r="6.5"/><path d="M21 21l-5.7-5.7"/></svg>'
-        f'<div style="font-size:13px;color:#c8cddb">best web design company near me</div></div>{rows}')
-    return win("google.co.in/search", inner)
+g.position.y=-1.0;
+finish(S);
+"""
 
+SCENES["mobile-app"] = """
+const S = makeStage({bg1:__BG1__, bg2:__BG2__, w:W, h:H});
+const g = S.root;
 
-def scene_social():
-    tiles = "".join(
-        f'<div style="background:#111420;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:9px">'
-        f'{tile(i, 96)}<div style="margin-top:9px;display:flex;align-items:center;gap:7px">'
-        f'<div style="width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,{BLUE},{PURPLE})"></div>'
-        f'<div style="flex:1">{bar("70%", 7, "rgba(255,255,255,.22)", 0)}</div></div></div>' for i in range(6))
-    return win("campaign creative",
-               f'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">{tiles}</div>')
-
-
-SCENES = {
-    "ecommerce": scene_ecommerce,
-    "dashboard": scene_dashboard,
-    "branding": scene_branding,
-    "mobile-app": scene_pwa,
-    "seo": scene_seo,
-    "social": scene_social,
+function phone(x,y,z,ry,scale,screen){
+  const p = new THREE.Group();
+  const body = box(2.5,5.0,0.30,P.slate,{r:0.32,rough:0.55});
+  const sc = box(2.25,4.6,0.16,screen,{r:0.26,rough:0.3}); sc.position.z=0.13;
+  const notch = box(0.9,0.16,0.1,P.ink,{r:0.05}); notch.position.set(0,2.1,0.2);
+  p.add(body,sc,notch);
+  p.position.set(x,y,z); p.rotation.set(-0.03,ry,0); p.scale.setScalar(scale);
+  return p;
 }
+g.add(phone(-3.3,2.7,-0.6,0.42,0.86,P.blue));
+g.add(phone(0,3.0,0.9,0.0,1.0,P.violet));
+g.add(phone(3.3,2.7,-0.6,-0.42,0.86,P.purple));
+
+// floating UI chips around the middle phone
+const chips=[[-1.9,5.3,2.0,P.cream,1.5],[2.0,5.0,2.1,P.amber,1.2],[2.3,1.4,2.3,P.cream,1.3],[-2.2,1.1,2.2,P.blueLt,1.0]];
+chips.forEach(([x,y,z,c,w])=>{ const ch=box(w,0.5,0.14,c,{r:0.2});
+  ch.position.set(x,y,z); ch.rotation.set(0.06,x>0?-0.3:0.3,0); g.add(ch); });
+
+// install badge
+const badge = cyl(0.62,0.62,0.16,P.amber,40); badge.rotation.x=Math.PI/2;
+badge.position.set(3.6,5.3,1.6); g.add(badge);
+
+g.position.y=-1.6;
+finish(S);
+"""
+
+SCENES["seo"] = """
+const S = makeStage({bg1:__BG1__, bg2:__BG2__, w:W, h:H});
+const g = S.root;
+
+// search field slab
+const field = box(6.4,1.1,0.4,P.cream,{r:0.5});
+field.position.set(-0.2,3.9,0.6); field.rotation.set(-0.04,0.1,0); g.add(field);
+const pill = box(3.4,0.34,0.12,P.blueLt,{r:0.17}); pill.position.set(-1.1,3.9,0.85); pill.rotation.y=0.1; g.add(pill);
+
+// magnifier
+const glass = torus(0.95,0.16,P.amber); glass.position.set(3.3,3.9,1.3); glass.rotation.set(0.1,0.1,0);
+g.add(glass);
+const lens = cyl(0.82,0.82,0.08,P.blueLt,36,{extra:{transparent:true,opacity:0.55}});
+lens.rotation.x=Math.PI/2; lens.position.set(3.3,3.9,1.3); g.add(lens);
+const grip = cyl(0.12,0.12,1.2,P.coral,20); grip.position.set(4.2,3.05,1.3); grip.rotation.z=-0.75; g.add(grip);
+
+// ranking podium — position 1 tallest
+const hs=[2.8,2.0,1.4];
+hs.forEach((h,i)=>{
+  const c = i===0?P.amber:(i===1?P.violet:P.slate);
+  const b = box(1.7,h,1.5,c,{r:0.12});
+  b.position.set(-2.4+i*2.0, h/2, 1.2); g.add(b);
+  const num = box(0.7,0.7,0.1,P.cream,{r:0.1}); num.position.set(-2.4+i*2.0,h-0.55,2.0); g.add(num);
+});
+
+// result rows floating behind
+[0,1,2].forEach(i=>{ const r=box(4.6,0.7,0.14,i?P.slate:P.cream,{r:0.12});
+  r.position.set(1.6,1.5+i*0.95,-1.6); r.rotation.y=-0.3; g.add(r); });
+
+g.position.y=-1.4;
+finish(S);
+"""
+
+SCENES["social"] = """
+const S = makeStage({bg1:__BG1__, bg2:__BG2__, w:W, h:H});
+const g = S.root;
+
+// phone at centre
+const body = box(2.7,5.4,0.32,P.slate,{r:0.34,rough:0.55});
+const sc = box(2.45,5.0,0.16,P.violet,{r:0.28,rough:0.3}); sc.position.z=0.14;
+const ph = new THREE.Group(); ph.add(body,sc);
+ph.position.set(-0.2,3.0,0.6); ph.rotation.set(-0.04,0.22,0); g.add(ph);
+
+// post cards fanning out
+const cards=[[-3.6,4.6,1.2,P.coral,0.42],[-4.0,2.0,1.6,P.cream,0.3],[3.3,4.9,1.0,P.amber,-0.4],[3.7,2.3,1.5,P.blueLt,-0.28]];
+cards.forEach(([x,y,z,c,ry])=>{ const cd=box(2.1,2.1,0.16,c,{r:0.16});
+  cd.position.set(x,y,z); cd.rotation.set(0.05,ry,0); g.add(cd); });
+
+// engagement bubbles
+const hearts=[[-1.9,6.3,2.2,0.34,P.coral],[1.5,6.6,2.0,0.28,P.amber],[2.6,5.7,2.4,0.22,P.purple],[-2.7,5.6,2.3,0.2,P.blueLt]];
+hearts.forEach(([x,y,z,r,c])=>{ const s=ball(r,c); s.position.set(x,y,z); g.add(s); });
+
+// speech bubble slab
+const bub = box(2.4,1.3,0.2,P.cream,{r:0.35}); bub.position.set(0.2,6.6,1.6); bub.rotation.z=0.05; g.add(bub);
+
+g.position.y=-1.9;
+finish(S);
+"""
+
+
+def serve(directory):
+    handler = lambda *a, **k: http.server.SimpleHTTPRequestHandler(*a, directory=directory, **k)
+    httpd = socketserver.TCPServer(("127.0.0.1", PORT), handler)
+    httpd.allow_reuse_address = True
+    threading.Thread(target=httpd.serve_forever, daemon=True).start()
+    return httpd
 
 
 def main():
     if not os.path.exists(CHROME):
-        raise SystemExit("Google Chrome not found — needed to render the mockups.")
+        raise SystemExit("Google Chrome not found — needed to render the scenes.")
+    wanted = sys.argv[1:] or list(SCENES)
     os.makedirs(OUT, exist_ok=True)
+
     tmp = tempfile.mkdtemp()
+    shutil.copy(os.path.join(ROOT, "build", "scene3d.js"), os.path.join(tmp, "scene3d.js"))
+    httpd = serve(tmp)                     # modules need http, not file://
 
-    for name, fn in SCENES.items():
-        html = os.path.join(tmp, name + ".html")
-        with open(html, "w", encoding="utf-8") as f:
-            f.write(BASE + f'<div class="stage">{fn()}</div>')
-        subprocess.run([
-            CHROME, "--headless", "--disable-gpu", "--hide-scrollbars",
-            "--force-device-scale-factor=2", f"--window-size={W},{H}",
-            "--virtual-time-budget=5000",
-            f"--screenshot={os.path.join(OUT, name + '.png')}", f"file://{html}",
-        ], capture_output=True)
-        old = os.path.join(OUT, name + ".svg")       # flat version is superseded
-        if os.path.exists(old):
-            os.remove(old)
-        print("  assets/work/" + name + ".png")
-
-    shutil.rmtree(tmp, ignore_errors=True)
+    try:
+        for name in wanted:
+            body = SCENES[name].replace("__BG1__", BG1).replace("__BG2__", BG2)
+            with open(os.path.join(tmp, name + ".html"), "w", encoding="utf-8") as f:
+                f.write(PAGE % {"map": IMPORTMAP, "W": W, "H": H, "body": body})
+            dest = os.path.join(OUT, name + ".png")
+            subprocess.run([
+                CHROME, "--headless", "--disable-gpu", "--use-gl=swiftshader",
+                "--enable-unsafe-swiftshader", "--hide-scrollbars",
+                f"--window-size={W},{H}", "--virtual-time-budget=90000",
+                f"--screenshot={dest}", f"http://127.0.0.1:{PORT}/{name}.html",
+            ], capture_output=True, timeout=300)
+            size = os.path.getsize(dest) if os.path.exists(dest) else 0
+            print(f"  assets/work/{name}.png  ({size // 1024} KB)")
+    finally:
+        httpd.shutdown()
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 if __name__ == "__main__":
