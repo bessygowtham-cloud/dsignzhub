@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;450;500;600&family=Inter:wght@400;450;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./css/style.css?v=5f4b1258">
+<link rel="stylesheet" href="./css/style.css?v=39713242">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Dsignzhub", "url": "https://www.dsignzhub.com/", "email": "hello@dsignzhub.com", "description": "Digital design, development & marketing for Indian businesses.", "areaServed": {"@type": "Country", "name": "India"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Dsignzhub", "url": "https://www.dsignzhub.com/"}</script>
 </head>
@@ -92,8 +92,10 @@
     </div>
 
     <div class="hero-art reveal" aria-hidden="true">
-      <div class="hero-shot hero-shot--a"><img src="./assets/work/dashboard.svg" alt="" width="560" height="380"></div>
-      <div class="hero-shot hero-shot--b"><img src="./assets/work/ecommerce.svg" alt="" width="560" height="380"></div>
+      <div class="hero-3d" id="heroStage">
+        <canvas id="hero3d"></canvas>
+        <svg class="hero-3d-fallback" viewBox="0 0 100 100" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>
+      </div>
       <div class="hero-badge">
         <span class="hero-badge-n">9</span>
         <span class="hero-badge-l">services<br>on tap</span>
@@ -227,7 +229,7 @@
     <div class="work-grid">
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="./assets/work/ecommerce.svg" alt="E-commerce Website project mockup" loading="lazy" width="560" height="380">
+            <img src="./assets/work/ecommerce.png" alt="E-commerce Website project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">Retail</span>
           </div>
           <div class="work-body">
@@ -237,7 +239,7 @@
         </article>
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="./assets/work/dashboard.svg" alt="Performance Dashboard project mockup" loading="lazy" width="560" height="380">
+            <img src="./assets/work/dashboard.png" alt="Performance Dashboard project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">Analytics</span>
           </div>
           <div class="work-body">
@@ -247,7 +249,7 @@
         </article>
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="./assets/work/branding.svg" alt="Brand Identity System project mockup" loading="lazy" width="560" height="380">
+            <img src="./assets/work/branding.png" alt="Brand Identity System project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">Branding</span>
           </div>
           <div class="work-body">
@@ -257,7 +259,7 @@
         </article>
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="./assets/work/mobile-app.svg" alt="Progressive Web App project mockup" loading="lazy" width="560" height="380">
+            <img src="./assets/work/mobile-app.png" alt="Progressive Web App project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">Mobile</span>
           </div>
           <div class="work-body">
@@ -267,7 +269,7 @@
         </article>
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="./assets/work/seo.svg" alt="Search Visibility project mockup" loading="lazy" width="560" height="380">
+            <img src="./assets/work/seo.png" alt="Search Visibility project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">SEO</span>
           </div>
           <div class="work-body">
@@ -277,7 +279,7 @@
         </article>
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="./assets/work/social.svg" alt="Social Campaign Set project mockup" loading="lazy" width="560" height="380">
+            <img src="./assets/work/social.png" alt="Social Campaign Set project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">Creative</span>
           </div>
           <div class="work-body">
@@ -441,5 +443,9 @@
   </div>
 </footer>
 <script src="./js/script.js?v=9d95344f"></script>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+</script>
+<script type="module" src="./js/hero3d.js?v=43accfb6"></script>
 </body>
 </html>

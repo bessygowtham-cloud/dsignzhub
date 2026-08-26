@@ -172,7 +172,7 @@ body{padding-top:92px}
 .hero-note{font-size:14.5px;color:var(--fg-2);line-height:1.45}
 
 /* stacked project mockups + floating badge */
-.hero-art{position:relative;min-height:300px}
+.hero-art{position:relative;min-height:340px}
 .hero-shot{position:absolute;border-radius:20px;overflow:hidden;border:1px solid var(--line-2);
   box-shadow:0 30px 70px -24px #000;background:var(--card)}
 .hero-shot img{width:100%;height:auto;display:block}
@@ -529,4 +529,66 @@ body{padding-top:92px}
 }
 @media (min-width:1080px){
   .price-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ==========================================================================
+   3D hero stage + cinematic depth
+   ========================================================================== */
+
+.hero-3d{position:relative;width:100%;height:100%;min-height:340px;
+  display:flex;align-items:center;justify-content:center}
+.hero-3d canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;
+  transition:opacity .9s ease .15s}
+.hero-3d.is-live canvas{opacity:1}
+/* shown until (and unless) WebGL starts */
+.hero-3d-fallback{width:min(230px,52vw);height:auto;color:var(--purple);
+  filter:drop-shadow(0 16px 46px rgba(122,110,255,.55))}
+.hero-3d.is-live .hero-3d-fallback{display:none}
+
+/* cinematic vignette + aurora wash behind the whole upper page */
+.hero{isolation:isolate}
+.hero::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(60% 50% at 50% 120%,rgba(45,105,251,.18),transparent 70%),
+    radial-gradient(120% 90% at 50% 50%,transparent 45%,rgba(0,0,0,.55) 100%);
+}
+.hero-grid{z-index:2}
+/* keeps the headline readable over the object on small screens */
+@media (max-width:900px){
+  .hero-copy{position:relative}
+  .hero-copy::before{content:'';position:absolute;inset:-24px -20px;z-index:-1;
+    background:radial-gradient(80% 70% at 30% 40%,rgba(0,0,0,.72),transparent 75%)}
+}
+
+/* ---------- glassmorphism pass ---------- */
+.pillar,.price-card,.voice,.why-card,.work-card,.service-card,.s-card,.d-card,.rel-card{
+  background:linear-gradient(150deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+  backdrop-filter:blur(14px) saturate(1.15);
+  -webkit-backdrop-filter:blur(14px) saturate(1.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09), 0 18px 44px -28px #000;
+}
+.price-card.is-featured{
+  background:
+    radial-gradient(130% 100% at 50% 0%,rgba(45,105,251,.30),transparent 62%),
+    linear-gradient(150deg,rgba(255,255,255,.09),rgba(255,255,255,.02));
+}
+.cta-inner{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+
+/* ---------- scroll parallax (driven in script.js) ---------- */
+.parallax{will-change:transform}
+
+/* ---------- ambient section glows ---------- */
+.sec::before{
+  content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:min(1100px,100%);height:420px;pointer-events:none;z-index:-1;
+  background:radial-gradient(50% 60% at 50% 0%,rgba(122,110,255,.10),transparent 70%);
+}
+
+@media (min-width:980px){
+  .hero-3d{min-height:460px}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-3d canvas{opacity:1}
+  .parallax{transform:none!important}
 }

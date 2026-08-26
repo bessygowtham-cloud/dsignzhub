@@ -36,6 +36,7 @@ def asset_version(relpath):
 
 CSS_V = None
 JS_V = None
+JS3_V = None
 
 
 def rel(depth):
@@ -154,8 +155,14 @@ def header(depth, active=""):
 """
 
 
-def footer(depth):
+def footer(depth, three=False):
     r = rel(depth)
+    # three.js is ~1.3MB, so only the page with the 3D hero loads it
+    three_tag = f"""
+<script type="importmap">
+{{"imports":{{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}}}
+</script>
+<script type="module" src="{r}js/hero3d.js?v={JS3_V}"></script>""" if three else ""
     svc_links = "".join(
         f'<a href="{r}services/{s["slug"]}/">{esc(s["nav"])}</a>' for s in SERVICES[:5]
     )
@@ -195,7 +202,7 @@ def footer(depth):
     <p>Made in India</p>
   </div>
 </footer>
-<script src="{r}js/script.js?v={JS_V}"></script>
+<script src="{r}js/script.js?v={JS_V}"></script>{three_tag}
 </body>
 </html>
 """
@@ -535,8 +542,10 @@ def home():
     </div>
 
     <div class="hero-art reveal" aria-hidden="true">
-      <div class="hero-shot hero-shot--a"><img src="{r}assets/work/dashboard.svg" alt="" width="560" height="380"></div>
-      <div class="hero-shot hero-shot--b"><img src="{r}assets/work/ecommerce.svg" alt="" width="560" height="380"></div>
+      <div class="hero-3d" id="heroStage">
+        <canvas id="hero3d"></canvas>
+        <svg class="hero-3d-fallback" viewBox="0 0 100 100" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>
+      </div>
       <div class="hero-badge">
         <span class="hero-badge-n">9</span>
         <span class="hero-badge-l">services<br>on tap</span>
@@ -614,7 +623,7 @@ def home():
 </section>
 
 {cta(depth, "Ready to build something that works?", "Tell us about your project and we will come back with a clear scope, a timeline and a fixed quote.")}
-""" + footer(depth)
+""" + footer(depth, three=True)
 
 
 def about():
@@ -739,9 +748,10 @@ def write(path, html):
 
 
 def main():
-    global CSS_V, JS_V
+    global CSS_V, JS_V, JS3_V
     CSS_V = asset_version("css/style.css")
     JS_V = asset_version("js/script.js")
+    JS3_V = asset_version("js/hero3d.js")
     print(f"asset versions: css={CSS_V} js={JS_V}")
 
     written = []
