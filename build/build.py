@@ -39,6 +39,15 @@ JS_V = None
 JS3_V = None
 
 
+def asset_url(relpath, depth):
+    """Asset URL with a content hash. Without this, replacing an image file
+    changes nothing for anyone holding a cached copy — the name is identical."""
+    try:
+        return f"{rel(depth)}{relpath}?v={asset_version(relpath)}"
+    except OSError:
+        return f"{rel(depth)}{relpath}"
+
+
 def rel(depth):
     """Relative path back to site root from a page nested `depth` folders deep."""
     return "../" * depth or "./"
@@ -76,7 +85,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(meta)}">
-<link rel="icon" type="image/svg+xml" href="{r}assets/logo-icon.svg">
+<link rel="icon" type="image/svg+xml" href="{asset_url('assets/logo-icon.svg', depth)}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;450;500;600&family=Inter:wght@400;450;500&display=swap" rel="stylesheet">
@@ -491,7 +500,7 @@ def home():
     work = "".join(f"""
         <article class="work-card reveal">
           <div class="work-shot">
-            <img src="{r}assets/work/{img}" alt="{esc(name)} project mockup" loading="lazy" width="560" height="380">
+            <img src="{asset_url(f'assets/work/{img}', depth)}" alt="{esc(name)} project mockup" loading="lazy" width="560" height="380">
             <span class="work-tag">{esc(tag)}</span>
           </div>
           <div class="work-body">
