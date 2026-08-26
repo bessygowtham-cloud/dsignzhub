@@ -358,17 +358,17 @@ SERVICE_BY_SLUG = {s["slug"]: s for s in SERVICES}
 # permission to name them.
 # --------------------------------------------------------------------------
 SHOWCASE = [
-    ("E-commerce Website", "Retail", "ecommerce.png",
+    ("E-commerce Website", "Retail", "ecommerce.jpg",
      "A storefront built around fast browsing, filterable catalogues and a short, tested checkout."),
-    ("Performance Dashboard", "Analytics", "dashboard.png",
+    ("Performance Dashboard", "Analytics", "dashboard.jpg",
      "Campaign and revenue reporting pulled into one screen, so decisions come from data."),
-    ("Brand Identity System", "Branding", "branding.png",
+    ("Brand Identity System", "Branding", "branding.jpg",
      "Logo, palette, typography and guidelines built as one coherent, reusable system."),
-    ("Progressive Web App", "Mobile", "mobile-app.png",
+    ("Progressive Web App", "Mobile", "mobile-app.jpg",
      "App-like speed and home-screen install without the cost of separate native builds."),
-    ("Search Visibility", "SEO", "seo.png",
+    ("Search Visibility", "SEO", "seo.jpg",
      "Technical fixes and content structured to rank for terms real buyers actually search."),
-    ("Social Campaign Set", "Creative", "social.png",
+    ("Social Campaign Set", "Creative", "social.jpg",
      "Coordinated creative sized correctly for every platform and placement."),
 ]
 
