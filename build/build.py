@@ -203,7 +203,7 @@ def footer(depth, three=False):
       <a href="mailto:{SITE['email']}">{SITE['email']}</a>
       <a href="tel:{SITE['phone_href']}">{SITE['phone_display']}</a>
       <div class="socials">{socials}</div>
-      <a href="mailto:{SITE['email']}" class="btn btn-light btn-sm footer-cta">Send Message</a>
+      <a href="mailto:{SITE['email']}" class="btn btn-primary btn-sm footer-cta">Send Message</a>
     </div>
   </div>
   <div class="container footer-bottom">

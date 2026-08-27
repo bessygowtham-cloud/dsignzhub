@@ -402,10 +402,11 @@ body{padding-top:92px}
   text-transform:uppercase;color:var(--fg-3);margin-bottom:6px}
 .footer-col a{font-size:14.5px;color:var(--fg-2);transition:color .2s}
 .footer-col a:hover{color:var(--fg)}
-/* .footer-col a (0,1,1) otherwise beats .btn-light (0,1,0) and overwrites its
-   dark text with the footer link colour, leaving "Send Message" grey on white */
-.footer-col a.btn-light{color:#0b0b0f}
-.footer-col a.btn-light:hover{color:#0b0b0f}
+/* .footer-col a (0,1,1) otherwise beats .btn-primary (0,1,0) and overwrites its
+   white text with the footer's grey link colour — "Send Message" was rendering
+   as dim grey-on-gradient instead of true white. */
+.footer-col a.btn-primary{color:#fff}
+.footer-col a.btn-primary:hover{color:#fff}
 .footer-bottom{display:flex;flex-direction:column;gap:8px;padding-top:24px;border-top:1px solid var(--line);
   color:var(--fg-3);font-size:13px}
 
