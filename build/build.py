@@ -234,30 +234,6 @@ def cta(depth, heading, sub):
 """
 
 
-def breadcrumb(depth, trail):
-    """trail: list of (label, href-or-None). Renders markup + JSON-LD."""
-    r = rel(depth)
-    parts = [f'<a href="{r}">Home</a>']
-    for label, href in trail:
-        if href:
-            parts.append(f'<a href="{r}{href}">{esc(label)}</a>')
-        else:
-            parts.append(f'<span aria-current="page">{esc(label)}</span>')
-    return ('<nav class="crumbs" aria-label="Breadcrumb"><div class="container">'
-            + '<span class="sep">/</span>'.join(parts) + '</div></nav>')
-
-
-def crumb_jsonld(trail_abs):
-    return {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": i + 1, "name": name, "item": f"{SITE['domain']}/{path}".rstrip("/") + ("/" if path else "")}
-            for i, (name, path) in enumerate(trail_abs)
-        ],
-    }
-
-
 def faq_block(faqs):
     items = ""
     for i, (q, a) in enumerate(faqs):
@@ -302,8 +278,7 @@ def service_page(svc):
         "areaServed": {"@type": "Country", "name": "India"},
         "url": f"{SITE['domain']}/{path}/",
     }
-    lds = [service_ld, faq_jsonld(svc["faqs"]),
-           crumb_jsonld([("Home", ""), ("Services", "services"), (svc["nav"], path)])]
+    lds = [service_ld, faq_jsonld(svc["faqs"])]
 
     intro = "".join(f"<p>{esc(p)}</p>" for p in svc["intro"])
 
@@ -333,8 +308,6 @@ def service_page(svc):
         </a>""" for s in svc["related"])
 
     return head(svc["title"], svc["meta"], path + "/", depth, lds) + header(depth, svc["slug"]) + f"""
-{breadcrumb(depth, [("Services", "services/"), (svc["nav"], None)])}
-
 <section class="svc-hero">
   <div class="container">
     <p class="eyebrow reveal">{esc(svc['eyebrow'])}</p>
@@ -411,10 +384,7 @@ def pricing_page():
     title = "Pricing | Website, SEO & Marketing Packages in India | Dsignzhub"
     meta = ("Transparent pricing for website design, e-commerce, SEO, Google Ads and branding. "
             "Fixed quotes in Indian rupees, with no lock-in.")
-    lds = [crumb_jsonld([("Home", ""), ("Pricing", "pricing")])]
-    return head(title, meta, "pricing/", depth, lds) + header(depth, "pricing") + f"""
-{breadcrumb(depth, [("Pricing", None)])}
-
+    return head(title, meta, "pricing/", depth, []) + header(depth, "pricing") + f"""
 <section class="svc-hero">
   <div class="container">
     <p class="eyebrow reveal">Pricing</p>
@@ -450,11 +420,7 @@ def services_index():
     title = "Our Services | Web, E-commerce, SEO & Branding | Dsignzhub"
     meta = ("End-to-end digital services for Indian businesses — website design and development, "
             "PWAs, e-commerce, digital marketing, SEO, Google Ads, graphic design and branding.")
-    lds = [crumb_jsonld([("Home", ""), ("Services", "services")])]
-
-    return head(title, meta, "services/", depth, lds) + header(depth, "services") + f"""
-{breadcrumb(depth, [("Services", None)])}
-
+    return head(title, meta, "services/", depth, []) + header(depth, "services") + f"""
 <section class="svc-hero">
   <div class="container">
     <p class="eyebrow reveal">What we do</p>
@@ -643,7 +609,6 @@ def about():
     title = "About Dsignzhub | Digital Agency for Indian Businesses"
     meta = ("Dsignzhub is a digital agency combining design, development and marketing to help "
             "Indian businesses build a lasting online presence.")
-    lds = [crumb_jsonld([("Home", ""), ("About", "about")])]
     steps = "".join(f"""
         <div class="step reveal">
           <span class="step-num">{i+1:02d}</span>
@@ -651,9 +616,7 @@ def about():
           <p>{esc(d)}</p>
         </div>""" for i, (t, d) in enumerate(PROCESS))
 
-    return head(title, meta, "about/", depth, lds) + header(depth, "about") + f"""
-{breadcrumb(depth, [("About", None)])}
-
+    return head(title, meta, "about/", depth, []) + header(depth, "about") + f"""
 <section class="svc-hero">
   <div class="container">
     <p class="eyebrow reveal">Who we are</p>
@@ -698,14 +661,12 @@ def contact():
     title = "Contact Dsignzhub | Get a Free Quote"
     meta = ("Get in touch with Dsignzhub for website design and development, SEO, Google Ads, "
             "e-commerce and branding. Tell us about your project and get a free quote.")
-    lds = [crumb_jsonld([("Home", ""), ("Contact", "contact")]), {
+    lds = [{
         "@context": "https://schema.org",
         "@type": "ContactPage",
         "url": f"{SITE['domain']}/contact/",
     }]
     return head(title, meta, "contact/", depth, lds) + header(depth, "contact") + f"""
-{breadcrumb(depth, [("Contact", None)])}
-
 <section class="svc-hero">
   <div class="container">
     <p class="eyebrow reveal">Get started</p>

@@ -92,15 +92,20 @@ section{position:relative}
   padding:12px 20px;border-radius:0 0 10px 0}
 .skip-link:focus{left:0}
 
-/* ---------- header: floating white pill ---------- */
+/* ---------- header: frosted-glass floating pill ----------
+   Translucent + blurred rather than solid white, so whatever is scrolling
+   underneath — the hero glow, section content — stays faintly visible
+   through it, the same glass language used on cards elsewhere on the site. */
 .site-header{position:fixed;top:14px;left:0;right:0;z-index:600;pointer-events:none}
 .site-header>.container{pointer-events:none}
 .header-inner{
   pointer-events:auto;
   display:flex;align-items:center;justify-content:space-between;gap:16px;
   height:64px;padding:0 10px 0 22px;
-  background:#fff;color:#0b0b0f;border-radius:var(--r-pill);
-  box-shadow:0 10px 40px -12px rgba(0,0,0,.65);
+  background:rgba(255,255,255,.72);color:#0b0b0f;border-radius:var(--r-pill);
+  border:1px solid rgba(255,255,255,.5);
+  backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);
+  box-shadow:0 10px 40px -12px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.6);
 }
 /* fixed header sits above the flow — push the first section clear of it */
 body{padding-top:92px}
@@ -330,12 +335,6 @@ body{padding-top:92px}
 .cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 
 /* ---------- inner pages ---------- */
-.crumbs{padding-block:30px 18px;border-bottom:1px solid var(--line);font-size:13px;color:var(--fg-3)}
-.crumbs .container{display:flex;flex-wrap:wrap;align-items:center;gap:9px}
-.crumbs a:hover{color:var(--purple)}
-.crumbs span[aria-current]{color:var(--fg-2)}
-.crumbs .sep{opacity:.4}
-
 .svc-hero{padding-block:clamp(46px,7vw,86px) clamp(34px,5vw,60px);text-align:center;overflow:hidden}
 .svc-hero::before{content:'';position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(620px circle at var(--mx,50%) var(--my,24%),rgba(45,105,251,.2),transparent 66%)}
