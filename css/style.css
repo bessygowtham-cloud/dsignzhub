@@ -431,7 +431,9 @@ body{padding-top:92px}
   .services-grid,.s-grid,.d-grid,.work-grid,.voices{grid-template-columns:repeat(3,1fr)}
   .why-grid,.b-grid{grid-template-columns:repeat(4,1fr)}
   .approach-steps{grid-template-columns:repeat(4,1fr)}
-  .step{border-bottom:0;border-right:1px solid var(--line);padding:4px 26px}
+  /* padding-top 20px = the original 4px + 16px, so the top border line clears
+     the number/title instead of sitting right on top of them */
+  .step{border-bottom:0;border-right:1px solid var(--line);padding:20px 26px 4px}
   .step:first-child{padding-left:0}
   .step:last-child{border-right:0}
   .work-grid{gap:22px}
