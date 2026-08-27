@@ -172,7 +172,10 @@ body{padding-top:92px}
    two-column — see the >=980px override. */
 .hero-art{order:1}
 .hero-copy{order:2}
-.hero-copy h1{margin-bottom:22px;max-width:14ch}
+/* No width cap on mobile — the narrow ch limit was forcing 2-3 words per
+   line. It's reapplied on desktop below, where the copy column is narrower
+   relative to the larger font size and needs it to avoid overly long lines. */
+.hero-copy h1{margin-bottom:22px}
 .hero-copy .lede{max-width:52ch;margin-bottom:32px}
 .hero-cta{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
 .btn-lg{padding:19px 40px;font-size:18px;min-height:60px}
@@ -434,6 +437,7 @@ body{padding-top:92px}
   .menu-toggle,.mobile-menu{display:none}
   .hero-grid{grid-template-columns:1.02fr .98fr;gap:56px}
   .hero-copy{order:0}
+  .hero-copy h1{max-width:14ch}
   .hero-art{order:0}
   .hero-art{min-height:430px}
 
