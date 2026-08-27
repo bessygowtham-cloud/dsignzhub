@@ -499,13 +499,16 @@ def home():
 
     work = "".join(f"""
         <article class="work-card reveal">
-          <div class="work-shot">
-            <img src="{asset_url(f'assets/work/{img}', depth)}" alt="{esc(name)} project mockup" loading="lazy" width="560" height="380">
-            <span class="work-tag">{esc(tag)}</span>
-          </div>
-          <div class="work-body">
+          <div class="work-head">
             <h3>{esc(name)}</h3>
             <p>{esc(desc)}</p>
+            <div class="work-meta">
+              <span class="work-tag">{esc(tag)}</span>
+              <svg class="work-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="work-shot">
+            <img src="{asset_url(f'assets/work/{img}', depth)}" alt="{esc(name)}" loading="lazy" width="560" height="380">
           </div>
         </article>""" for name, tag, img, desc in SHOWCASE)
 
