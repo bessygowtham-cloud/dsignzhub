@@ -178,6 +178,14 @@ body{padding-top:92px}
 .hero-copy h1{margin-bottom:22px}
 .hero-copy .lede{max-width:52ch;margin-bottom:32px}
 .hero-cta{display:flex;flex-wrap:wrap;gap:20px;align-items:center}
+/* Two-button rows (service-page hero, cta-actions) get a smaller mobile-only
+   button size so both sit side by side instead of stacking. Scoped to
+   .svc-hero .hero-cta rather than the bare class — the homepage hero also
+   uses .hero-cta but for a single .btn-lg button, which this must not shrink.
+   flex-wrap stays on as a safety net: a pair still too wide (e.g. a long
+   email address) wraps to two lines instead of overflowing. */
+.svc-hero .hero-cta{gap:12px}
+.svc-hero .hero-cta .btn,.cta-actions .btn{padding:13px 18px;font-size:14.5px;min-height:44px}
 .btn-lg{padding:19px 40px;font-size:18px;min-height:60px}
 .hero-note{font-size:14.5px;color:var(--fg-2);line-height:1.45}
 
@@ -423,6 +431,8 @@ body{padding-top:92px}
 /* ==================== tablet ==================== */
 @media (min-width:720px){
   .hero-art{min-height:400px}
+  .svc-hero .hero-cta{gap:20px}
+  .svc-hero .hero-cta .btn,.cta-actions .btn{padding:15px 30px;font-size:16px;min-height:48px}
   .pillars{grid-template-columns:repeat(3,1fr)}
   .stats-grid{grid-template-columns:repeat(4,1fr);gap:24px}
   .services-grid,.s-grid,.d-grid,.why-grid{grid-template-columns:1fr 1fr}
