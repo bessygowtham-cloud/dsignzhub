@@ -189,7 +189,11 @@ body{padding-top:92px}
    uses .hero-cta but for a single .btn-lg button, which this must not shrink.
    flex-wrap stays on as a safety net: a pair still too wide (e.g. a long
    email address) wraps to two lines instead of overflowing. */
-.svc-hero .hero-cta{gap:12px}
+/* Centred here to match .svc-hero{text-align:center} — flexbox ignores
+   text-align on its own children, so without this the button row defaults
+   to flex-start (left) while the heading/lede above it sit centred. The bare
+   .hero-cta (homepage) stays left-aligned to match its left-aligned copy. */
+.svc-hero .hero-cta{gap:12px;justify-content:center}
 .svc-hero .hero-cta .btn,.cta-actions .btn{padding:13px 18px;font-size:14.5px;min-height:44px}
 .btn-lg{padding:19px 40px;font-size:18px;min-height:60px}
 .hero-note{font-size:14.5px;color:var(--fg-2);line-height:1.45}
