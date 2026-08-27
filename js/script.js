@@ -73,26 +73,6 @@ if (mDropToggle && mDropList) {
   });
 }
 
-/* ---------------- FAQ accordion ----------------
-   One open at a time. The panel animates via grid-template-rows so it works
-   without measuring pixel heights. */
-document.querySelectorAll('.faq-q').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    const isOpen = btn.getAttribute('aria-expanded') === 'true';
-
-    document.querySelectorAll('.faq-q[aria-expanded="true"]').forEach((other) => {
-      if (other !== btn) {
-        other.setAttribute('aria-expanded', 'false');
-        document.getElementById(other.getAttribute('aria-controls')).classList.remove('open');
-      }
-    });
-
-    btn.setAttribute('aria-expanded', String(!isOpen));
-    panel.classList.toggle('open', !isOpen);
-  });
-});
-
 /* ---------------- Service hero spotlight ---------------- */
 const svcHero = document.querySelector('.svc-hero');
 if (svcHero && window.matchMedia('(hover: hover) and (pointer: fine)').matches

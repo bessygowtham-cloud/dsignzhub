@@ -234,32 +234,6 @@ def cta(depth, heading, sub):
 """
 
 
-def faq_block(faqs):
-    items = ""
-    for i, (q, a) in enumerate(faqs):
-        items += f"""
-      <div class="faq-item reveal">
-        <button class="faq-q" aria-expanded="false" aria-controls="faq-a-{i}" id="faq-q-{i}">
-          <span>{esc(q)}</span>
-          <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v12M1 7h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </button>
-        <div class="faq-a" id="faq-a-{i}" role="region" aria-labelledby="faq-q-{i}"><p>{esc(a)}</p></div>
-      </div>"""
-    return items
-
-
-def faq_jsonld(faqs):
-    return {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {"@type": "Question", "name": q,
-             "acceptedAnswer": {"@type": "Answer", "text": a}}
-            for q, a in faqs
-        ],
-    }
-
-
 # --------------------------------------------------------------------------
 # pages
 # --------------------------------------------------------------------------
@@ -278,7 +252,7 @@ def service_page(svc):
         "areaServed": {"@type": "Country", "name": "India"},
         "url": f"{SITE['domain']}/{path}/",
     }
-    lds = [service_ld, faq_jsonld(svc["faqs"])]
+    lds = [service_ld]
 
     intro = "".join(f"<p>{esc(p)}</p>" for p in svc["intro"])
 
@@ -344,11 +318,6 @@ def service_page(svc):
   <div class="approach-steps">{steps}</div>
 </section>
 
-<section class="svc-section container">
-  <p class="section-label reveal">Questions</p>
-  <h2 class="section-title reveal">Frequently asked</h2>
-  <div class="faq">{faq_block(svc['faqs'])}</div>
-</section>
 
 <section class="svc-section container">
   <p class="section-label reveal">Keep exploring</p>
