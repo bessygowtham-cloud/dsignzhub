@@ -12,7 +12,7 @@ SITE = {
     # https://web3forms.com (enter the email, no account/signup needed, key
     # arrives by email in seconds). Paste it here to make the contact form
     # deliver to the inbox; until then it silently falls back to mailto:.
-    "web3forms_key": "",
+    "web3forms_key": "c6060d64-0474-40b7-b717-5ed761d22485",
 }
 
 # Order here drives the nav dropdown, the services index and the footer.
