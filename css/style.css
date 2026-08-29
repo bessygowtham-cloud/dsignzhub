@@ -386,10 +386,17 @@ body{padding-top:92px}
   background-repeat:no-repeat;background-position:right 16px center;background-size:12px}
 .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--purple)}
 .form-note{font-size:13.5px;color:var(--purple);min-height:18px}
-.contact-direct{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-top:22px;
+.contact-direct{display:flex;flex-direction:column;gap:14px;padding-top:22px;
   border-top:1px solid var(--line);font-family:var(--head);font-size:15.5px}
-.contact-direct a:hover{color:var(--purple)}
-.contact-direct .dot{color:var(--fg-3)}
+.contact-line{display:flex;align-items:center;gap:12px;color:var(--fg);transition:color .2s ease}
+.contact-line:hover,.contact-line:focus-visible{color:var(--purple)}
+.contact-ico{flex:none;width:20px;height:20px;color:var(--fg-3);
+  stroke-dasharray:100;stroke-dashoffset:100;transition:color .2s ease,stroke-dashoffset .9s ease}
+.reveal.is-visible .contact-ico{transition-delay:.15s}
+.reveal.is-visible .contact-line:nth-child(2) .contact-ico{transition-delay:.3s}
+.reveal.is-visible .contact-ico,
+.contact-line:hover .contact-ico,.contact-line:focus-visible .contact-ico{stroke-dashoffset:0}
+.contact-line:hover .contact-ico,.contact-line:focus-visible .contact-ico{color:var(--purple)}
 
 /* ---------- footer ---------- */
 .site-footer{border-top:1px solid var(--line);padding-block:clamp(48px,7vw,76px) 30px;background:var(--bg-2)}

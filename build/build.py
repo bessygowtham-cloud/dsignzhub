@@ -676,9 +676,8 @@ def contact():
     </form>
 
     <div class="contact-direct reveal">
-      <a href="mailto:{SITE['email']}">{SITE['email']}</a>
-      <span class="dot">•</span>
-      <a href="tel:{SITE['phone_href']}">{SITE['phone_display']}</a>
+      <a href="mailto:{SITE['email']}" class="contact-line">{icon('mail', 'ico contact-ico')}{SITE['email']}</a>
+      <a href="tel:{SITE['phone_href']}" class="contact-line">{icon('phone-call', 'ico contact-ico')}{SITE['phone_display']}</a>
     </div>
   </div>
 </section>

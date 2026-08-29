@@ -26,6 +26,9 @@ ICONS = {
     "facebook": '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M14.5 8.5h-1.2a1.8 1.8 0 0 0-1.8 1.8V21M9.5 13h5"/>',
     "whatsapp": '<path d="M3.5 20.5l1.3-4.2A8 8 0 1 1 8 19.4l-4.5 1.1Z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5.6 0 1.2-.5 1.2-1.1l-1.6-.8-1 .9a5 5 0 0 1-2.1-2.1l.9-1-.8-1.6c-.6 0-1.1.6-1.1 1.2Z"/>',
     "arrow": '<path d="M3 12h16M13 6l6 6-6 6"/>',
+    # contact rows (drawn with pathLength so CSS can animate a stroke draw-in)
+    "mail": '<rect x="3" y="5" width="18" height="14" rx="2.5" pathLength="100"/><path d="M4 7l8 6 8-6" pathLength="100"/>',
+    "phone-call": '<path d="M6.5 3.5c-1.7 0-3 1.3-3 3 0 8.3 6.7 15 15 15 1.7 0 3-1.3 3-3v-2.2a1.5 1.5 0 0 0-1.2-1.5l-3.6-.8a1.5 1.5 0 0 0-1.5.5l-1 1.2a11.6 11.6 0 0 1-5.4-5.4l1.2-1a1.5 1.5 0 0 0 .5-1.5l-.8-3.6A1.5 1.5 0 0 0 8.7 3.5H6.5Z" pathLength="100"/>',
 }
 
 
