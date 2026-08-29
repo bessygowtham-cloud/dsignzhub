@@ -341,6 +341,10 @@ def pricing_cards(depth):
           {tag}
           <h3>{esc(tier['name'])}</h3>
           <p class="price-meta">{esc(tier['meta'])}</p>
+          <div class="price-discount">
+            <span class="price-off">{esc(tier['discount'])}</span>
+            <span class="price-was">{esc(tier['original_price'])}</span>
+          </div>
           <p class="price-amt">{esc(tier['price'])}<span>{esc(tier['unit'])}</span></p>
           <ul class="price-list">{pts}</ul>
           <a href="{r}contact/" class="btn {'btn-primary' if tier['featured'] else 'btn-ghost'} price-btn">Book a call</a>
@@ -553,7 +557,7 @@ def home():
     <div class="sec-head">
       <span class="eyebrow reveal">Pricing</span>
       <h2 class="display reveal">Select your plan</h2>
-      <p class="lede reveal">Transparent packages in rupees. Change or cancel whenever you need to.</p>
+      <p class="lede reveal">Straightforward packages in rupees, billed annually with no hidden invoices.</p>
     </div>
     <div class="price-grid">{pricing_cards(depth)}</div>
   </div>

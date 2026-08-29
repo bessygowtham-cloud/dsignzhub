@@ -498,6 +498,11 @@ body{padding-top:92px}
 }
 .price-card h3{font-family:var(--head);font-size:21px;font-weight:500;letter-spacing:-.01em;margin-bottom:5px}
 .price-meta{color:var(--fg-3);font-size:13.5px;margin-bottom:18px}
+.price-discount{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.price-off{font-family:var(--head);font-size:11px;font-weight:600;letter-spacing:.04em;
+  color:#3ddc97;background:rgba(61,220,151,.14);border:1px solid rgba(61,220,151,.3);
+  padding:3px 9px;border-radius:var(--r-pill)}
+.price-was{color:var(--fg-3);font-size:14.5px;text-decoration:line-through;font-variant-numeric:tabular-nums}
 .price-amt{font-family:var(--head);font-size:clamp(30px,4.4vw,38px);font-weight:500;letter-spacing:-.03em;
   line-height:1.05;margin-bottom:22px;font-variant-numeric:tabular-nums}
 .price-amt span{font-size:15px;color:var(--fg-3);letter-spacing:0;margin-left:5px}
@@ -528,11 +533,8 @@ body{padding-top:92px}
 .social .ico{width:19px;height:19px}
 .footer-cta{margin-top:14px;align-self:flex-start}
 
-@media (min-width:720px){
-  .price-grid{grid-template-columns:1fr 1fr}
-}
-@media (min-width:1080px){
-  .price-grid{grid-template-columns:repeat(4,1fr)}
+@media (min-width:900px){
+  .price-grid{grid-template-columns:repeat(3,1fr)}
 }
 
 /* ==========================================================================
