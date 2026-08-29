@@ -74,6 +74,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(meta)}">
 <link rel="canonical" href="{url}">
