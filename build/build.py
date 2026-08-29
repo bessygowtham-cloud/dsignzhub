@@ -144,7 +144,6 @@ def header(depth, active=""):
 
 <div class="mobile-menu" id="mobileMenu">
   <nav aria-label="Mobile primary">
-    <a href="{r}">Home</a>
     <button class="m-drop-toggle" id="mDropToggle" aria-expanded="false" aria-controls="mDropList">
       Services
       <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
