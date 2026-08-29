@@ -113,15 +113,20 @@ function start() {
   scene.add(key, fill, rim);
 
   // ---------- floating elements ----------
+  // Spread is tightened in x/y and pushed behind the object (negative z, away
+  // from camera) rather than spanning ±z through it — points that far off-axis
+  // this close to the camera fell outside the frustum entirely and never
+  // rendered, reading as dust stopping dead at an invisible box edge instead
+  // of receding naturally into the background.
   const dust = new THREE.Points(
     (() => {
       const g = new THREE.BufferGeometry();
       const n = 420;
       const pos = new Float32Array(n * 3);
       for (let i = 0; i < n; i++) {
-        pos[i * 3] = (Math.random() - 0.5) * 22;
-        pos[i * 3 + 1] = (Math.random() - 0.5) * 14;
-        pos[i * 3 + 2] = (Math.random() - 0.5) * 14 - 3;
+        pos[i * 3] = (Math.random() - 0.5) * 16;
+        pos[i * 3 + 1] = (Math.random() - 0.5) * 10;
+        pos[i * 3 + 2] = (Math.random() - 0.5) * 16 - 9;
       }
       g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
       return g;
@@ -133,9 +138,12 @@ function start() {
   );
   scene.add(dust);
 
-  // two thin orbit rings, tilted, for depth
+  // Two thin orbit rings, tilted, for depth. Radii are sized to stay inside
+  // the camera's frustum at every rotation angle (a flat ring's on-screen
+  // extent from its centre never exceeds its own radius, whatever it's
+  // rotated to) — otherwise they clip against the canvas edge as they spin.
   const rings = new THREE.Group();
-  [[2.9, 0x2d69fb, 0.38], [3.7, 0xd278fe, 0.26]].forEach(([r, c, o], i) => {
+  [[1.55, 0x2d69fb, 0.38], [2.0, 0xd278fe, 0.26]].forEach(([r, c, o], i) => {
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(r, 0.008, 8, 180),
       new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o }),
