@@ -138,12 +138,15 @@ function start() {
   );
   scene.add(dust);
 
-  // Two thin orbit rings, tilted, for depth. Radii are sized to stay inside
-  // the camera's frustum at every rotation angle (a flat ring's on-screen
-  // extent from its centre never exceeds its own radius, whatever it's
-  // rotated to) — otherwise they clip against the canvas edge as they spin.
+  // Two thin orbit rings, tilted, for depth — drawn at their full, prominent
+  // design radii and then scaled down (never up) per-container in resize(),
+  // just enough to guarantee they stay inside that container's own frustum
+  // at every rotation angle. A fixed radius forces a compromise between
+  // "fits the narrowest phone" and "fills the desktop frame"; scaling
+  // relative to each container's actual bounds gets both at once.
+  const RING_OUTER_R = 3.7;
   const rings = new THREE.Group();
-  [[1.55, 0x2d69fb, 0.38], [2.0, 0xd278fe, 0.26]].forEach(([r, c, o], i) => {
+  [[2.9, 0x2d69fb, 0.38], [3.7, 0xd278fe, 0.26]].forEach(([r, c, o], i) => {
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(r, 0.008, 8, 180),
       new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o }),
@@ -169,6 +172,15 @@ function start() {
     group.position.x = wide ? 1.7 : 0;
     camera.position.z = wide ? 7.4 : 8.6;
     camera.updateProjectionMatrix();
+
+    // Fit the orbit rings to this container: the frustum's half-height/width
+    // at the object's depth (z=0), take whichever is tighter, and scale the
+    // rings to fill ~88% of that — full-size design radius capped down only
+    // on containers narrow/short enough to need it.
+    const halfH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
+    const halfW = halfH * camera.aspect;
+    const bound = Math.min(halfH, halfW);
+    rings.scale.setScalar(Math.min(1, (bound * 0.88) / RING_OUTER_R));
   }
   resize();
   addEventListener('resize', resize, { passive: true });
