@@ -44,22 +44,56 @@ if ('IntersectionObserver' in window) {
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// Contact form (no backend yet — hands off to the visitor's mail client)
+// Contact form — delivers via Web3Forms when an access key is configured,
+// falling back to the visitor's mail client (mailto:) if the key is missing
+// or the request fails, so a submission is never silently lost.
 const contactForm = document.getElementById('contactForm');
 const formNote = document.getElementById('formNote');
 
+function mailtoFallback(form) {
+  const name = form.querySelector('#name').value.trim();
+  const email = form.querySelector('#email').value.trim();
+  const message = form.querySelector('#message').value.trim();
+  const to = form.dataset.toEmail || 'hello@dsignzhub.com';
+
+  const subject = encodeURIComponent(`Project inquiry from ${name}`);
+  const body = encodeURIComponent(`${message}\n\nFrom: ${name} (${email})`);
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  if (formNote) formNote.textContent = 'Opening your email app to send this message…';
+}
+
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const message = document.getElementById('message').value.trim();
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
 
-    const subject = encodeURIComponent(`Project inquiry from ${name}`);
-    const body = encodeURIComponent(`${message}\n\nFrom: ${name} (${email})`);
-    window.location.href = `mailto:hello@dsignzhub.com?subject=${subject}&body=${body}`;
+    if (!contactForm.dataset.web3formsKey) {
+      mailtoFallback(contactForm);
+      return;
+    }
 
-    if (formNote) formNote.textContent = 'Opening your email app to send this message…';
+    if (submitBtn) submitBtn.disabled = true;
+    if (formNote) formNote.textContent = 'Sending…';
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: new FormData(contactForm),
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        if (formNote) formNote.textContent = "Thanks — we've received your message and will reply within one working day.";
+        contactForm.reset();
+      } else {
+        mailtoFallback(contactForm);
+      }
+    } catch (err) {
+      mailtoFallback(contactForm);
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
   });
 }
 

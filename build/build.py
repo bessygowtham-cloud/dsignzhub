@@ -650,7 +650,10 @@ def contact():
 
 <section class="contact container">
   <div class="contact-panel">
-    <form class="contact-form reveal" id="contactForm">
+    <form class="contact-form reveal" id="contactForm" data-web3forms-key="{esc(SITE['web3forms_key'])}" data-to-email="{esc(SITE['email'])}">
+      <input type="hidden" name="access_key" value="{esc(SITE['web3forms_key'])}">
+      <input type="hidden" name="subject" value="New project inquiry from dsignzhub.com">
+      <input type="text" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="form-row">
         <div class="field"><label for="name">Full Name*</label><input type="text" id="name" name="name" required></div>
         <div class="field"><label for="email">Email*</label><input type="email" id="email" name="email" required></div>

@@ -8,6 +8,11 @@ SITE = {
     "phone_display": "+91 86672 53891",
     "phone_href": "+918667253891",
     "tagline": "Digital design, development & marketing for Indian businesses.",
+    # Web3Forms access key tied to hello@dsignzhub.com — get one free at
+    # https://web3forms.com (enter the email, no account/signup needed, key
+    # arrives by email in seconds). Paste it here to make the contact form
+    # deliver to the inbox; until then it silently falls back to mailto:.
+    "web3forms_key": "",
 }
 
 # Order here drives the nav dropdown, the services index and the footer.
