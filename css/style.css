@@ -541,6 +541,21 @@ body{padding-top:92px}
 .social .ico{width:19px;height:19px}
 .footer-cta{margin-top:14px;align-self:flex-start}
 
+/* ---------- floating WhatsApp button ---------- */
+.whatsapp-float{
+  position:fixed;left:20px;bottom:20px;z-index:390;
+  display:flex;align-items:center;justify-content:center;width:56px;height:56px;
+  border-radius:50%;background:#25d366;color:#fff;
+  box-shadow:0 10px 30px -8px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.12);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.whatsapp-float:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 16px 38px -10px rgba(0,0,0,.7)}
+.whatsapp-float .ico{width:28px;height:28px}
+@media (max-width:480px){
+  .whatsapp-float{left:14px;bottom:14px;width:50px;height:50px}
+  .whatsapp-float .ico{width:25px;height:25px}
+}
+
 @media (min-width:900px){
   .price-grid{grid-template-columns:repeat(3,1fr)}
 }

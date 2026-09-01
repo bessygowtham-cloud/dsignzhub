@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import sys
+from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content import (SITE, SERVICES, PROCESS, SERVICE_BY_SLUG,  # noqa: E402
@@ -211,6 +212,10 @@ def footer(depth, three=False):
     <p>Made in India</p>
   </div>
 </footer>
+<a href="https://wa.me/{SITE['phone_href'].lstrip('+')}?text={quote("Hi Dsignzhub! I'd like to know more about your services.")}"
+   class="whatsapp-float" aria-label="Chat with us on WhatsApp" target="_blank" rel="noopener">
+  {icon('whatsapp')}
+</a>
 <script src="{r}js/script.js?v={JS_V}"></script>{three_tag}
 </body>
 </html>
