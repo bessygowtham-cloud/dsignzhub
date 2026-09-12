@@ -341,6 +341,18 @@ body{padding-top:92px}
 .prose p{color:var(--fg-2);font-size:16.5px;margin-bottom:16px}
 .prose p:last-child{margin-bottom:0}
 
+/* ---------- legal documents (privacy, terms) ---------- */
+.legal-doc{max-width:760px}
+.legal-doc .updated{color:var(--fg-3);font-size:14px;margin-bottom:36px}
+.legal-doc h2{font-family:var(--head);font-size:23px;font-weight:500;letter-spacing:-.01em;
+  color:var(--fg);margin:40px 0 14px}
+.legal-doc h2:first-child{margin-top:0}
+.legal-doc ul,.legal-doc ol{margin:0 0 16px;padding-left:22px;color:var(--fg-2);font-size:16.5px}
+.legal-doc li{list-style:disc;margin-bottom:8px;line-height:1.55}
+.legal-doc ol li{list-style:decimal}
+.legal-doc strong{color:var(--fg);font-weight:600}
+.legal-doc a{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+
 .svc-section{padding-block:clamp(48px,7vw,84px)}
 .svc-benefits{padding-block:clamp(52px,7vw,88px);background:var(--bg-2);border-block:1px solid var(--line)}
 
@@ -416,6 +428,9 @@ body{padding-top:92px}
 .footer-col a.btn-primary:hover{color:#fff}
 .footer-bottom{display:flex;flex-direction:column;gap:8px;padding-top:24px;border-top:1px solid var(--line);
   color:var(--fg-3);font-size:13px}
+.footer-legal{display:flex;gap:18px}
+.footer-legal a{color:var(--fg-3);transition:color .2s}
+.footer-legal a:hover{color:var(--fg-2)}
 
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}

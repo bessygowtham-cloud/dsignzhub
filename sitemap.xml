@@ -5,6 +5,8 @@
   <url><loc>https://www.dsignzhub.com/pricing/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/about/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/contact/</loc><priority>0.8</priority></url>
+  <url><loc>https://www.dsignzhub.com/privacy/</loc><priority>0.3</priority></url>
+  <url><loc>https://www.dsignzhub.com/terms/</loc><priority>0.3</priority></url>
   <url><loc>https://www.dsignzhub.com/services/website-design-development/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/services/progressive-web-apps/</loc><priority>0.8</priority></url>
   <url><loc>https://www.dsignzhub.com/services/ecommerce-development/</loc><priority>0.8</priority></url>

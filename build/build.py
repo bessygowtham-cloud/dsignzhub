@@ -49,6 +49,15 @@ def asset_url(relpath, depth):
         return f"{rel(depth)}{relpath}"
 
 
+def asset_url_abs(relpath):
+    """Absolute asset URL with a content hash — for tags like og:image that
+    the OpenGraph/Twitter spec requires to be absolute, not relative."""
+    try:
+        return f"{SITE['domain']}/{relpath}?v={asset_version(relpath)}"
+    except OSError:
+        return f"{SITE['domain']}/{relpath}"
+
+
 def rel(depth):
     """Relative path back to site root from a page nested `depth` folders deep."""
     return "../" * depth or "./"
@@ -70,6 +79,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
     for block in (jsonld or []):
         blocks += f'\n<script type="application/ld+json">{json.dumps(block, ensure_ascii=False)}</script>'
     sprite_markup = sprite()
+    og_image = asset_url_abs("assets/og-image.jpg")
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,9 +94,14 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 <meta property="og:description" content="{esc(meta)}">
 <meta property="og:url" content="{url}">
 <meta property="og:site_name" content="{SITE['name']}">
+<meta property="og:image" content="{og_image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{esc(SITE['name'])} — {esc(SITE['tagline'])}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(meta)}">
+<meta name="twitter:image" content="{og_image}">
 <link rel="icon" type="image/svg+xml" href="{asset_url('assets/logo-icon.svg', depth)}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -209,6 +224,10 @@ def footer(depth, three=False):
   </div>
   <div class="container footer-bottom">
     <p>&copy; <span id="year"></span> {SITE['name']}. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="{r}privacy/">Privacy Policy</a>
+      <a href="{r}terms/">Terms &amp; Conditions</a>
+    </div>
     <p>Made in India</p>
   </div>
 </footer>
@@ -689,6 +708,138 @@ def contact():
 """ + footer(depth)
 
 
+LEGAL_UPDATED = "12 September 2026"
+
+
+def privacy():
+    depth = 1
+    title = "Privacy Policy | Dsignzhub"
+    meta = "How Dsignzhub collects, uses and protects information when you use this website or get in touch with us."
+
+    return head(title, meta, "privacy/", depth, []) + header(depth) + f"""
+<section class="svc-hero">
+  <div class="container">
+    <p class="eyebrow reveal">Legal</p>
+    <h1 class="svc-h1 reveal">Privacy Policy</h1>
+  </div>
+</section>
+
+<section class="svc-intro container">
+  <div class="prose legal-doc reveal">
+    <p class="updated">Last updated: {LEGAL_UPDATED}</p>
+
+    <h2>Who we are</h2>
+    <p>This Privacy Policy explains how {SITE['name']} ("we", "us") handles information collected through {SITE['domain']} (this "site") and when you contact us directly. {SITE['name']} is a digital agency based in India, offering website design and development, e-commerce, SEO, Google Ads, branding and related services.</p>
+
+    <h2>Information we collect</h2>
+    <ul>
+      <li><strong>Contact form.</strong> When you submit the form on our <a href="{rel(depth)}contact/">Contact</a> page, we collect your name, email address, phone number, company name (if provided), the service you're interested in, and your message. This is sent to our inbox to respond to your enquiry.</li>
+      <li><strong>WhatsApp and phone.</strong> If you click the WhatsApp button or our phone number, you leave this site to open WhatsApp or your phone's dialler directly — we don't collect anything from that click itself, though any conversation you then have with us is handled the same as any other business enquiry.</li>
+      <li><strong>Technical data.</strong> Like any website, our hosting provider's servers log standard technical information (such as IP address, browser type and pages requested) for security and reliability purposes. This site does not currently set any cookies of its own.</li>
+    </ul>
+
+    <h2>How we use this information</h2>
+    <ul>
+      <li>To respond to your enquiry and provide quotes or information you've requested</li>
+      <li>To deliver services you've engaged us for</li>
+      <li>To maintain ordinary business and financial records</li>
+    </ul>
+    <p>We do not sell your information to third parties, and we don't use it for purposes unrelated to the above without asking you first.</p>
+
+    <h2>Third-party services</h2>
+    <ul>
+      <li><strong>Web3Forms</strong> processes contact form submissions on our behalf so they reach our inbox. See their <a href="https://web3forms.com/privacy" target="_blank" rel="noopener">privacy policy</a>.</li>
+      <li><strong>Google Fonts</strong> serves the typefaces used on this site from Google's servers, which may log standard technical data such as your IP address as part of delivering the font files.</li>
+      <li>This site is hosted across GitHub Pages and a MilesWeb server, each of which may log standard access data as part of normal hosting operation.</li>
+    </ul>
+    <p>If we start using analytics or advertising tools that set cookies (for example, Google Analytics or Google Ads), we'll update this policy and add a cookie consent notice before doing so.</p>
+
+    <h2>Data retention</h2>
+    <p>We keep enquiry and project information for as long as reasonably necessary to respond to you, deliver services, and meet our own legal and accounting obligations, after which it's deleted or anonymised.</p>
+
+    <h2>Security</h2>
+    <p>We take reasonable steps to protect information you share with us, but no method of transmission or storage over the internet is completely secure, and we can't guarantee absolute security.</p>
+
+    <h2>Your rights</h2>
+    <p>Under India's Digital Personal Data Protection Act, 2023, and other applicable law, you can ask us to access, correct or delete the personal information we hold about you. To do this, email us at <a href="mailto:{SITE['email']}">{SITE['email']}</a> and we'll respond as soon as we reasonably can.</p>
+
+    <h2>Children's privacy</h2>
+    <p>This site and our services are intended for businesses and individuals who can enter into a contract, and are not directed at children.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>We may update this policy from time to time — for example, if we start using new tools that collect data. The "Last updated" date above will reflect the latest revision.</p>
+
+    <h2>Contact us</h2>
+    <p>Questions about this policy? Email <a href="mailto:{SITE['email']}">{SITE['email']}</a>.</p>
+  </div>
+</section>
+""" + footer(depth)
+
+
+def terms():
+    depth = 1
+    title = "Terms and Conditions | Dsignzhub"
+    meta = "The terms that apply to using the Dsignzhub website and engaging Dsignzhub for design, development and marketing services."
+
+    return head(title, meta, "terms/", depth, []) + header(depth) + f"""
+<section class="svc-hero">
+  <div class="container">
+    <p class="eyebrow reveal">Legal</p>
+    <h1 class="svc-h1 reveal">Terms and Conditions</h1>
+  </div>
+</section>
+
+<section class="svc-intro container">
+  <div class="prose legal-doc reveal">
+    <p class="updated">Last updated: {LEGAL_UPDATED}</p>
+
+    <h2>Agreement</h2>
+    <p>These terms apply whenever you use {SITE['domain']} (this "site") or engage {SITE['name']} ("we", "us") for services. By using this site or asking us to start work, you agree to them. Where we agree a separate written scope, quote or contract for a project, the specific terms in that document take priority over these general terms.</p>
+
+    <h2>Our services</h2>
+    <p>We provide website design and development, e-commerce, SEO, Google Ads, branding and related digital services, described on our <a href="{rel(depth)}services/">Services</a> and <a href="{rel(depth)}pricing/">Pricing</a> pages. Pricing shown on this site is indicative; the exact scope, timeline and fixed quote for your project are confirmed with you before work begins, usually after a short scoping call.</p>
+
+    <h2>Getting started</h2>
+    <ul>
+      <li>Work begins once we've agreed the scope and price with you, generally over email or a written quote.</li>
+      <li>Changes beyond the agreed scope are discussed and priced separately before we carry them out — we don't invoice for extra work you haven't approved.</li>
+      <li>Timelines depend on you providing content, feedback and access (e.g. domain, hosting or ad account logins) in a reasonably timely manner; delays on your end can shift the delivery date.</li>
+    </ul>
+
+    <h2>Payment</h2>
+    <p>Payment terms (amount, schedule and method) are agreed individually per project and confirmed in writing before work begins. Ongoing packages such as those on our <a href="{rel(depth)}pricing/">Pricing</a> page are billed as stated there.</p>
+
+    <h2>Ownership</h2>
+    <p>Once a project is paid in full, the resulting code, designs and content become your property, and any domain, hosting or ad accounts registered in your name remain yours regardless of whether you continue working with us. Work that hasn't yet been paid for remains our property until payment is received.</p>
+
+    <h2>No guaranteed results</h2>
+    <p>We work to good practice for SEO, advertising and marketing, but rankings, ad performance and campaign results depend on factors outside our control — including competitors, platform algorithm changes, and how search engines and ad platforms (like Google) choose to rank or price things. We can't guarantee specific rankings, traffic or sales figures.</p>
+
+    <h2>Third-party platforms</h2>
+    <p>Where our work involves third-party platforms — Google Ads, Google Analytics, social media platforms, payment gateways, hosting providers and similar — your use of those platforms is governed by their own separate terms, and we aren't responsible for their availability, pricing changes or policy changes.</p>
+
+    <h2>Limitation of liability</h2>
+    <p>To the extent permitted by law, we aren't liable for indirect or consequential losses (such as lost profits or lost business) arising from your use of our services or this site. Nothing here limits liability that can't legally be limited.</p>
+
+    <h2>Ending an engagement</h2>
+    <p>Either party can end an ongoing engagement with reasonable written notice. You remain responsible for paying for work completed up to that point.</p>
+
+    <h2>Using this website</h2>
+    <p>Content on this site is provided for general information about our services and is not a guarantee of any specific outcome. You may not copy or reproduce the content of this site for commercial purposes without our permission.</p>
+
+    <h2>Governing law</h2>
+    <p>These terms are governed by the laws of India.</p>
+
+    <h2>Changes to these terms</h2>
+    <p>We may update these terms from time to time; the "Last updated" date above reflects the latest revision.</p>
+
+    <h2>Contact us</h2>
+    <p>Questions about these terms? Email <a href="mailto:{SITE['email']}">{SITE['email']}</a>.</p>
+  </div>
+</section>
+""" + footer(depth)
+
+
 # --------------------------------------------------------------------------
 # write
 # --------------------------------------------------------------------------
@@ -713,13 +864,17 @@ def main():
     written.append(write("about/index.html", about()))
     written.append(write("contact/index.html", contact()))
     written.append(write("pricing/index.html", pricing_page()))
+    written.append(write("privacy/index.html", privacy()))
+    written.append(write("terms/index.html", terms()))
     for svc in SERVICES:
         written.append(write(f"services/{svc['slug']}/index.html", service_page(svc)))
 
     # sitemap + robots
-    urls = [""] + ["services/", "pricing/", "about/", "contact/"] + [f"services/{s['slug']}/" for s in SERVICES]
+    urls = ([""] + ["services/", "pricing/", "about/", "contact/", "privacy/", "terms/"]
+            + [f"services/{s['slug']}/" for s in SERVICES])
     body = "".join(
-        f"\n  <url><loc>{SITE['domain']}/{u}</loc><priority>{'1.0' if u == '' else '0.8'}</priority></url>"
+        f"\n  <url><loc>{SITE['domain']}/{u}</loc><priority>"
+        f"{'1.0' if u == '' else '0.3' if u in ('privacy/', 'terms/') else '0.8'}</priority></url>"
         for u in urls
     )
     write("sitemap.xml",
