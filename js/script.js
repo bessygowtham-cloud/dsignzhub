@@ -62,10 +62,42 @@ function mailtoFallback(form) {
   if (formNote) formNote.textContent = 'Opening your email app to send this message…';
 }
 
+// Custom inline error states — native browser validation tooltips are easy
+// to miss (and look inconsistent across browsers), so we show our own
+// message under the field and a red border instead.
+function fieldMessage(input) {
+  if (input.validity.valueMissing) return input.id === 'email' ? 'Please enter your email address.' : 'Please enter your name.';
+  if (input.validity.typeMismatch) return 'Please enter a valid email address.';
+  return '';
+}
+
+function validateField(input) {
+  const field = input.closest('.field');
+  const errorEl = field && field.querySelector('.field-error');
+  const message = fieldMessage(input);
+  if (field) field.classList.toggle('field-invalid', !!message);
+  if (errorEl) errorEl.textContent = message;
+  return !message;
+}
+
 if (contactForm) {
+  contactForm.querySelectorAll('#name, #email').forEach((input) => {
+    input.addEventListener('blur', () => validateField(input));
+    input.addEventListener('input', () => {
+      if (input.closest('.field').classList.contains('field-invalid')) validateField(input);
+    });
+  });
+
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+    const requiredFields = [...contactForm.querySelectorAll('#name, #email')];
+    const validations = requiredFields.map(validateField);
+    if (validations.includes(false)) {
+      requiredFields[validations.indexOf(false)].focus();
+      return;
+    }
 
     if (!contactForm.dataset.web3formsKey) {
       mailtoFallback(contactForm);
@@ -84,8 +116,8 @@ if (contactForm) {
       const result = await res.json();
 
       if (result.success) {
-        if (formNote) formNote.textContent = "Thanks — we've received your message and will reply within one working day.";
         contactForm.reset();
+        window.location.href = '../thank-you/';
       } else {
         mailtoFallback(contactForm);
       }

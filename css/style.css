@@ -397,6 +397,9 @@ body{padding-top:92px}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%239a9aa4' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 16px center;background-size:12px}
 .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--purple)}
+.field-error{display:none;color:#ff6b7d;font-size:13px;margin-top:7px}
+.field.field-invalid input{border-color:#ff6b7d}
+.field.field-invalid .field-error{display:block}
 .form-note{font-size:13.5px;color:var(--purple);min-height:18px}
 .contact-direct{display:flex;flex-direction:column;gap:14px;padding-top:22px;
   border-top:1px solid var(--line);font-family:var(--head);font-size:15.5px}
@@ -556,9 +559,12 @@ body{padding-top:92px}
 .social .ico{width:19px;height:19px}
 .footer-cta{margin-top:14px;align-self:flex-start}
 
-/* ---------- floating WhatsApp button ---------- */
+/* ---------- floating WhatsApp button ----------
+   bottom:88px by default to clear the sticky mobile CTA bar below it; both
+   the size tweak and the bottom offset revert together once that bar hides
+   at the desktop breakpoint (see .sticky-cta below). */
 .whatsapp-float{
-  position:fixed;right:20px;bottom:20px;z-index:390;
+  position:fixed;right:20px;bottom:88px;z-index:390;
   display:flex;align-items:center;justify-content:center;width:56px;height:56px;
   border-radius:50%;background:#25d366;color:#fff;
   box-shadow:0 10px 30px -8px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.12);
@@ -567,8 +573,26 @@ body{padding-top:92px}
 .whatsapp-float:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 16px 38px -10px rgba(0,0,0,.7)}
 .whatsapp-float .ico{width:28px;height:28px}
 @media (max-width:480px){
-  .whatsapp-float{right:14px;bottom:14px;width:50px;height:50px}
+  .whatsapp-float{right:14px;width:50px;height:50px}
   .whatsapp-float .ico{width:25px;height:25px}
+}
+
+/* ---------- sticky mobile CTA ----------
+   Desktop already has a persistent "Book a Call" in the header; on mobile
+   that button is hidden (no room), so without this there is no CTA visible
+   at all while scrolling — only one reachable by opening the hamburger menu. */
+.sticky-cta{
+  position:fixed;left:0;right:0;bottom:0;z-index:380;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(8,8,10,.88);border-top:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.sticky-cta .btn{width:100%}
+body{padding-bottom:80px}
+@media (min-width:980px){
+  .sticky-cta{display:none}
+  .whatsapp-float{bottom:20px}
+  body{padding-bottom:0}
 }
 
 @media (min-width:900px){

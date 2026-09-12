@@ -72,7 +72,7 @@ LOGO = """<svg class="brand-icon" viewBox="0 0 100 100" fill="none" aria-hidden=
 <path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>"""
 
 
-def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
+def head(title, meta, canonical_path, depth, jsonld=None, og_type="website", noindex=False):
     r = rel(depth)
     url = f"{SITE['domain']}/{canonical_path}".rstrip("/") + ("/" if canonical_path else "")
     blocks = ""
@@ -80,6 +80,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
         blocks += f'\n<script type="application/ld+json">{json.dumps(block, ensure_ascii=False)}</script>'
     sprite_markup = sprite()
     og_image = asset_url_abs("assets/og-image.jpg")
+    robots_tag = '\n<meta name="robots" content="noindex,follow">' if noindex else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +89,7 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 <meta name="theme-color" content="#000000">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(meta)}">
-<link rel="canonical" href="{url}">
+<link rel="canonical" href="{url}">{robots_tag}
 <meta property="og:type" content="{og_type}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(meta)}">
@@ -103,6 +104,10 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website"):
 <meta name="twitter:description" content="{esc(meta)}">
 <meta name="twitter:image" content="{og_image}">
 <link rel="icon" type="image/svg+xml" href="{asset_url('assets/logo-icon.svg', depth)}">
+<link rel="icon" type="image/png" sizes="32x32" href="{asset_url('assets/favicon-32.png', depth)}">
+<link rel="icon" type="image/png" sizes="16x16" href="{asset_url('assets/favicon-16.png', depth)}">
+<link rel="apple-touch-icon" sizes="180x180" href="{asset_url('assets/apple-touch-icon.png', depth)}">
+<link rel="manifest" href="{r}site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;450;500;600&family=Inter:wght@400;450;500&display=swap" rel="stylesheet">
@@ -231,6 +236,9 @@ def footer(depth, three=False):
     <p>Made in India</p>
   </div>
 </footer>
+<div class="sticky-cta">
+  <a href="{r}contact/" class="btn btn-primary">Book a Call</a>
+</div>
 <a href="https://wa.me/{SITE['phone_href'].lstrip('+')}?text={quote("Hi Dsignzhub! I'd like to know more about your services.")}"
    class="whatsapp-float" aria-label="Chat with us on WhatsApp" target="_blank" rel="noopener">
   {icon('whatsapp')}
@@ -674,13 +682,13 @@ def contact():
 
 <section class="contact container">
   <div class="contact-panel">
-    <form class="contact-form reveal" id="contactForm" data-web3forms-key="{esc(SITE['web3forms_key'])}" data-to-email="{esc(SITE['email'])}">
+    <form class="contact-form reveal" id="contactForm" novalidate data-web3forms-key="{esc(SITE['web3forms_key'])}" data-to-email="{esc(SITE['email'])}">
       <input type="hidden" name="access_key" value="{esc(SITE['web3forms_key'])}">
       <input type="hidden" name="subject" value="New project inquiry from dsignzhub.com">
       <input type="text" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="form-row">
-        <div class="field"><label for="name">Full Name*</label><input type="text" id="name" name="name" required></div>
-        <div class="field"><label for="email">Email*</label><input type="email" id="email" name="email" required></div>
+        <div class="field"><label for="name">Full Name*</label><input type="text" id="name" name="name" required><span class="field-error" aria-live="polite"></span></div>
+        <div class="field"><label for="email">Email*</label><input type="email" id="email" name="email" required><span class="field-error" aria-live="polite"></span></div>
       </div>
       <div class="form-row">
         <div class="field"><label for="phone">Phone / WhatsApp</label><input type="tel" id="phone" name="phone"></div>
@@ -840,6 +848,48 @@ def terms():
 """ + footer(depth)
 
 
+def not_found():
+    # Lives at /404.html (root, not a folder) — GitHub Pages and most Apache/
+    # LiteSpeed hosts (see .htaccess) both look for that exact path.
+    depth = 0
+    title = "Page Not Found | Dsignzhub"
+    meta = "The page you're looking for doesn't exist or has moved."
+
+    return head(title, meta, "404.html", depth, [], noindex=True) + header(depth) + f"""
+<section class="svc-hero">
+  <div class="container">
+    <p class="eyebrow reveal">404</p>
+    <h1 class="svc-h1 reveal">This page took a wrong turn</h1>
+    <p class="svc-lede reveal">The page you're looking for doesn't exist, or it's moved. Try one of these instead.</p>
+    <div class="hero-cta reveal" style="justify-content:center;margin-top:28px">
+      <a href="{rel(depth)}" class="btn btn-primary btn-lg">Back to Home</a>
+      <a href="{rel(depth)}contact/" class="btn btn-ghost btn-lg">Contact Us</a>
+    </div>
+  </div>
+</section>
+""" + footer(depth)
+
+
+def thank_you():
+    depth = 1
+    title = "Thanks for reaching out | Dsignzhub"
+    meta = "Thanks for contacting Dsignzhub — we'll get back to you within one working day."
+
+    return head(title, meta, "thank-you/", depth, [], noindex=True) + header(depth) + f"""
+<section class="svc-hero">
+  <div class="container">
+    <p class="eyebrow reveal">Message sent</p>
+    <h1 class="svc-h1 reveal">Thanks &mdash; we've got your message</h1>
+    <p class="svc-lede reveal">We'll come back to you with a clear scope, a timeline and a fixed quote, usually within one working day. In the meantime, feel free to look around.</p>
+    <div class="hero-cta reveal" style="justify-content:center;margin-top:28px">
+      <a href="{rel(depth)}" class="btn btn-primary btn-lg">Back to Home</a>
+      <a href="{rel(depth)}pricing/" class="btn btn-ghost btn-lg">See Pricing</a>
+    </div>
+  </div>
+</section>
+""" + footer(depth)
+
+
 # --------------------------------------------------------------------------
 # write
 # --------------------------------------------------------------------------
@@ -866,6 +916,8 @@ def main():
     written.append(write("pricing/index.html", pricing_page()))
     written.append(write("privacy/index.html", privacy()))
     written.append(write("terms/index.html", terms()))
+    written.append(write("thank-you/index.html", thank_you()))
+    written.append(write("404.html", not_found()))
     for svc in SERVICES:
         written.append(write(f"services/{svc['slug']}/index.html", service_page(svc)))
 
@@ -881,6 +933,20 @@ def main():
           f'<?xml version="1.0" encoding="UTF-8"?>\n'
           f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}\n</urlset>\n')
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE['domain']}/sitemap.xml\n")
+
+    manifest = {
+        "name": SITE["name"],
+        "short_name": SITE["name"],
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#000000",
+        "theme_color": "#000000",
+        "icons": [
+            {"src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png"},
+        ],
+    }
+    write("site.webmanifest", json.dumps(manifest, indent=2) + "\n")
 
     print(f"Generated {len(written)} pages + sitemap.xml + robots.txt")
     for p in written:
