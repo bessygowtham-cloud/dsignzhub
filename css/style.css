@@ -326,6 +326,27 @@ body{padding-top:92px}
 .cta-inner p{color:var(--fg-2);max-width:54ch;margin:0 auto 26px}
 .cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 
+/* ---------- light-card variant (CTA band, contact form) ---------- */
+.card-light{
+  background:linear-gradient(180deg,#fff,#f6f6fa)!important;
+  border-color:rgba(11,11,15,.08)!important;
+}
+.card-light h1,.card-light h2,.card-light h3{color:#0b0b0f}
+.card-light p{color:#55555f}
+.card-light .field label{color:#55555f}
+.card-light .field input,.card-light .field textarea,.card-light .field select{
+  background:#f2f2f6;border-color:rgba(11,11,15,.12);color:#0b0b0f}
+.card-light .field input:focus,.card-light .field textarea:focus,.card-light .field select:focus{border-color:var(--purple)}
+.card-light .field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23555560' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;background-size:12px}
+.card-light .btn-ghost{border-color:rgba(11,11,15,.16);color:#0b0b0f}
+.card-light .btn-ghost:hover{background:rgba(11,11,15,.05);border-color:rgba(11,11,15,.3)}
+.card-light .contact-direct{border-top-color:rgba(11,11,15,.08)}
+.card-light .contact-line{color:#0b0b0f}
+.card-light .contact-ico{color:#8a8a94}
+.card-light .form-note{color:var(--purple)}
+
 /* ---------- inner pages ---------- */
 .svc-hero{padding-block:clamp(46px,7vw,86px) clamp(34px,5vw,60px);text-align:center;overflow:hidden}
 .svc-hero::before{content:'';position:absolute;inset:0;pointer-events:none;

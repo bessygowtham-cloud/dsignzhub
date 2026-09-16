@@ -253,7 +253,7 @@ def cta(depth, heading, sub):
     r = rel(depth)
     return f"""<section class="cta-band">
   <div class="container">
-    <div class="cta-inner reveal">
+    <div class="cta-inner card-light reveal">
       <h2>{esc(heading)}</h2>
       <p>{esc(sub)}</p>
       <div class="cta-actions">
@@ -681,7 +681,7 @@ def contact():
 </section>
 
 <section class="contact container">
-  <div class="contact-panel">
+  <div class="contact-panel card-light">
     <form class="contact-form reveal" id="contactForm" novalidate data-web3forms-key="{esc(SITE['web3forms_key'])}" data-to-email="{esc(SITE['email'])}">
       <input type="hidden" name="access_key" value="{esc(SITE['web3forms_key'])}">
       <input type="hidden" name="subject" value="New project inquiry from dsignzhub.com">
