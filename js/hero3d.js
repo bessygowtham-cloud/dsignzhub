@@ -1,18 +1,40 @@
-/* Interactive 3D hero.
+/* Interactive 3D hero — desktop only.
  *
- * The object is the Dsignzhub monogram itself — the same D outline with a Z
- * counter used everywhere else — extruded and lit, rather than a generic blob.
- * Everything degrades safely: no WebGL, a blocked CDN, or reduced-motion all
- * leave the static SVG mark visible and this module simply never starts.
+ * The object is the Dsignzhub mark itself, extruded straight from
+ * assets/logo-icon.svg so the 3D object and the flat logo can never drift
+ * apart. Everything degrades safely: no WebGL, a blocked CDN, or
+ * reduced-motion all leave the static SVG mark visible.
+ *
+ * Below the desktop breakpoint the hero has no 3D stage at all, so three.js
+ * (~1.3MB) is never fetched — hence the dynamic imports rather than a
+ * top-level one, which would download it for phones that never render it.
  */
-import * as THREE from 'three';
+const DESKTOP = '(min-width: 980px)';
 
 const canvas = document.getElementById('hero3d');
 const stage = document.querySelector('.hero-3d');
-if (canvas && stage) start();
+if (canvas && stage && matchMedia(DESKTOP).matches) start();
 
-function start() {
+async function start() {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let THREE, SVGLoader, shapes;
+  try {
+    let loaderMod;
+    [THREE, loaderMod] = await Promise.all([
+      import('three'),
+      import('three/addons/loaders/SVGLoader.js'),
+    ]);
+    SVGLoader = loaderMod.SVGLoader;
+
+    const svgUrl = new URL('../assets/logo-icon.svg', import.meta.url);
+    const svgText = await (await fetch(svgUrl)).text();
+    shapes = new SVGLoader().parse(svgText).paths
+      .flatMap((p) => SVGLoader.createShapes(p));
+  } catch (e) {
+    return;                        // CDN blocked or mark unreadable — fallback stays
+  }
+  if (!shapes.length) return;
 
   let renderer;
   try {
@@ -55,32 +77,19 @@ function start() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.15;
 
-  // ---------- the monogram ----------
-  // Drawn in the SVG's 100x100 grid, recentred and y-flipped for 3D space.
-  const shape = new THREE.Shape();
-  shape.moveTo(-24, 36);
-  shape.lineTo(-2, 36);
-  shape.absarc(-2, 0, 36, Math.PI / 2, -Math.PI / 2, true);
-  shape.lineTo(-36, -36);
-  shape.lineTo(-36, 24);
-  shape.closePath();
-
-  const hole = new THREE.Path();
-  [[-20, 20], [16, 20], [16, 10], [-4, -10], [16, -10],
-   [16, -20], [-20, -20], [-20, -10], [0, 10], [-20, 10]]
-    .forEach(([x, y], i) => (i ? hole.lineTo(x, y) : hole.moveTo(x, y)));
-  hole.closePath();
-  shape.holes.push(hole);
-
-  const geo = new THREE.ExtrudeGeometry(shape, {
-    depth: 16, bevelEnabled: true, bevelThickness: 2.4,
-    bevelSize: 2, bevelSegments: 6, curveSegments: 48,
+  // ---------- the mark ----------
+  // The shape came out of the SVG above, whose y axis points down. The mesh is
+  // turned a half-turn about x to correct that — a rotation, not a negative
+  // scale, which would mirror the mark and reverse the face winding.
+  const geo = new THREE.ExtrudeGeometry(shapes, {
+    depth: 10, bevelEnabled: true, bevelThickness: 1.5,
+    bevelSize: 1.2, bevelSegments: 6, curveSegments: 48,
   });
   geo.center();
   geo.computeVertexNormals();
 
   const mat = new THREE.MeshPhysicalMaterial({
-    color: 0xb9a8ff,
+    color: 0xa78bfc,
     metalness: 0.9,
     roughness: 0.12,
     envMapIntensity: 1.5,
@@ -94,7 +103,8 @@ function start() {
   });
 
   const mark = new THREE.Mesh(geo, mat);
-  mark.scale.setScalar(0.036);
+  mark.rotation.x = Math.PI;
+  mark.scale.setScalar(0.056);
 
   const group = new THREE.Group();
   group.add(mark);

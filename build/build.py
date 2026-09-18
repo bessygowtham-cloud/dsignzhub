@@ -9,6 +9,7 @@ tags stay consistent across all of them. Page copy lives in content.py.
 import hashlib
 import json
 import os
+import re
 import sys
 from urllib.parse import quote
 
@@ -68,8 +69,32 @@ def esc(text):
                 .replace(">", "&gt;").replace('"', "&quot;"))
 
 
-LOGO = """<svg class="brand-icon" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-<path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>"""
+LOGO_VIEWBOX = "22.8 14 46.4 46.4"
+
+
+def _logo_path():
+    """The mark's geometry lives in assets/logo-icon.svg and nowhere else — the
+    favicon, the inline header/footer mark and the extruded 3D hero shape all
+    read from that one file, so a logo change never has to be made twice."""
+    with open(os.path.join(ROOT, "assets", "logo-icon.svg"), encoding="utf-8") as f:
+        return re.search(r'<path[^>]*\bd="([^"]+)"', f.read()).group(1)
+
+
+LOGO_PATH = _logo_path()
+
+
+def logo(uid, cls="brand-icon"):
+    """The mark is a gradient fill, so each instance needs its own gradient id —
+    the header and footer both render it on the same page."""
+    gid = f"dzg-{uid}"
+    return (
+        f'<svg class="{cls}" viewBox="{LOGO_VIEWBOX}" fill="none" aria-hidden="true">'
+        f'<defs><linearGradient id="{gid}" x1="46" y1="14" x2="46" y2="60.4609" '
+        f'gradientUnits="userSpaceOnUse">'
+        f'<stop stop-color="#8472FC"/><stop offset="1" stop-color="#B575FD"/>'
+        f'</linearGradient></defs>'
+        f'<path fill="url(#{gid})" d="{LOGO_PATH}"/></svg>'
+    )
 
 
 def head(title, meta, canonical_path, depth, jsonld=None, og_type="website", noindex=False):
@@ -135,7 +160,7 @@ def header(depth, active=""):
   <div class="container">
     <div class="header-inner">
       <a href="{r}" class="brand" aria-label="{SITE['name']} home">
-        {LOGO}
+        {logo('h')}
         <span class="brand-word">Dsignzhub</span>
       </a>
 
@@ -190,7 +215,8 @@ def footer(depth, three=False):
     # three.js is ~1.3MB, so only the page with the 3D hero loads it
     three_tag = f"""
 <script type="importmap">
-{{"imports":{{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}}}
+{{"imports":{{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+"three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}}}
 </script>
 <script type="module" src="{r}js/hero3d.js?v={JS3_V}"></script>""" if three else ""
     svc_links = "".join(
@@ -205,7 +231,7 @@ def footer(depth, three=False):
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
-      <a href="{r}" class="brand">{LOGO}<span class="brand-word">Dsignzhub</span></a>
+      <a href="{r}" class="brand">{logo('f')}<span class="brand-word">Dsignzhub</span></a>
       <p>{SITE['tagline']}</p>
     </div>
     <div class="footer-col">
@@ -527,7 +553,7 @@ def home():
     <div class="hero-art reveal" aria-hidden="true">
       <div class="hero-3d" id="heroStage">
         <canvas id="hero3d"></canvas>
-        <svg class="hero-3d-fallback" viewBox="0 0 100 100" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M26 14H48A36 36 0 0 1 48 86H14V26Z M30 30H66V40L46 60H66V70H30V60L50 40H30Z"/></svg>
+        {logo('fb', 'hero-3d-fallback')}
       </div>
       <div class="hero-badge">
         <span class="hero-badge-n">9</span>

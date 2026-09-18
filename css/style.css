@@ -643,11 +643,14 @@ body{padding-bottom:80px}
     radial-gradient(120% 90% at 50% 50%,transparent 45%,rgba(0,0,0,.55) 100%);
 }
 .hero-grid{z-index:2}
-/* keeps the headline readable over the object on small screens */
-@media (max-width:900px){
-  .hero-copy{position:relative}
-  .hero-copy::before{content:'';position:absolute;inset:-24px -20px;z-index:-1;
-    background:radial-gradient(80% 70% at 30% 40%,rgba(0,0,0,.72),transparent 75%)}
+
+/* The 3D stage is desktop-only — below the two-column breakpoint the hero is
+   copy and CTA alone, and hero3d.js bails out before fetching three.js at all,
+   so phones never pay for a canvas they don't render. The scrim that used to
+   sit behind the headline went with it: there's no longer an object under the
+   text to read against. */
+@media (max-width:979.98px){
+  .hero-art{display:none}
 }
 
 /* ---------- glassmorphism pass ---------- */
