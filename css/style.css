@@ -109,6 +109,10 @@ section{position:relative}
 }
 /* fixed header sits above the flow — push the first section clear of it */
 body{padding-top:92px}
+/* …and the same for in-page jumps (Projects, Process): without an offset the
+   target lands under the header's 78px (14px inset + 64px bar), hiding the
+   section's label */
+section[id]{scroll-margin-top:78px}
 
 .brand{display:flex;align-items:center;gap:10px;min-height:44px}
 .header-inner .brand-icon{color:#0b0b0f}

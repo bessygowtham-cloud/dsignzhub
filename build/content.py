@@ -520,7 +520,7 @@ PRICING = [
 # Footer social links. Replace the '#' placeholders with the real profile URLs.
 SOCIALS = [
     ("linkedin", "LinkedIn", "#"),
-    ("instagram", "Instagram", "#"),
-    ("facebook", "Facebook", "#"),
+    ("instagram", "Instagram", "https://www.instagram.com/dsignzhub/"),
+    ("facebook", "Facebook", "https://www.facebook.com/profile.php?id=61593022267519"),
     ("whatsapp", "WhatsApp", "https://wa.me/918667253891"),
 ]

@@ -128,7 +128,10 @@ def head(title, meta, canonical_path, depth, jsonld=None, og_type="website", noi
 <meta name="twitter:title" content="{esc(title)}">
 <meta name="twitter:description" content="{esc(meta)}">
 <meta name="twitter:image" content="{og_image}">
+<link rel="icon" href="{asset_url('favicon.ico', depth)}" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/svg+xml" href="{asset_url('assets/logo-icon.svg', depth)}">
+<link rel="icon" type="image/png" sizes="96x96" href="{asset_url('assets/favicon-96.png', depth)}">
+<link rel="icon" type="image/png" sizes="48x48" href="{asset_url('assets/favicon-48.png', depth)}">
 <link rel="icon" type="image/png" sizes="32x32" href="{asset_url('assets/favicon-32.png', depth)}">
 <link rel="icon" type="image/png" sizes="16x16" href="{asset_url('assets/favicon-16.png', depth)}">
 <link rel="apple-touch-icon" sizes="180x180" href="{asset_url('assets/apple-touch-icon.png', depth)}">
@@ -171,7 +174,7 @@ def header(depth, active=""):
           </a>
           <div class="drop"><ul>{items}</ul></div>
         </div>
-        <a href="{r}#work">Work</a>
+        <a href="{r}#work">Projects</a>
         <a href="{r}#process">Process</a>
         <a href="{r}pricing/"{cls('pricing')}>Pricing</a>
         <a href="{r}about/"{cls('about')}>About</a>
@@ -195,7 +198,7 @@ def header(depth, active=""):
       <svg viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5 11 1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
     </button>
     <div class="m-drop" id="mDropList"><ul>{items}</ul></div>
-    <a href="{r}#work">Work</a>
+    <a href="{r}#work">Projects</a>
     <a href="{r}#process">Process</a>
     <a href="{r}pricing/">Pricing</a>
     <a href="{r}about/">About</a>
@@ -593,7 +596,7 @@ def home():
 <section class="sec" id="work">
   <div class="container">
     <div class="sec-head">
-      <span class="eyebrow reveal">Selected work</span>
+      <span class="eyebrow reveal">Selected projects</span>
       <h2 class="display reveal">What we build</h2>
     </div>
     <div class="work-grid">{work}</div>
