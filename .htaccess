@@ -1,1 +1,8 @@
 ErrorDocument 404 /404.html
+
+# Send plain-http visits to https, keeping host, path and query string.
+# /.well-known/ is exempt so SSL certificate (re)issuance can validate over http.
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
